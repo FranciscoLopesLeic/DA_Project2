@@ -1,3 +1,3 @@
-# DA_Project2
-Routing Algorithm for Ocean Shipping and Urban Deliveries
+# DA_Project2 
+# Routing Algorithm for Ocean Shipping and Urban Deliveries
 We were asked to first, implement a basic exhaustive approach for the classic routing problem using the TSP abstraction, therefore learning first hand that although such an approach can find optimal solutions, its applicability is restricted to very small graphs. Secondly, refine our critical thinking skills, by developing and analysing a set of approximate solutions to the TSP.
