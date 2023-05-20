@@ -2,16 +2,24 @@
 
 #include "App.h"
 
+App::App() {
+    for(int i = 0; i < NUMBER_GRAPHS; i++){
+        graphs.push_back(new Graph(i));
+    }
+}
+
+
 void App::run() {
     while (true) {
-        std::cout << "Menu:\n";
-        std::cout << "1. Option 1\n";
-        std::cout << "2. Option 2\n";
-        std::cout << "3. Quit\n";
-        std::cout << "Enter your choice: ";
+        cout << "Menu:\n";
+        cout << "1. Option 1\n";
+        cout << "2. Option 2\n";
+        cout << "3. Option 3\n";
+        cout << "4. Quit\n";
+        cout << "Enter your choice: ";
 
-        int choice;
-        std::cin >> choice;
+        cout << "Enter your choice: ";
+        int choice = getOptionFromUser();
 
         switch (choice) {
             case 1:
@@ -21,19 +29,49 @@ void App::run() {
                 menuOption2();
                 break;
             case 3:
-                return;  // Exit the loop to quit the application
+                menuOption3();
+                break;
+            case 4:
+                std::cout << "Goodbye!\n";
+                return;
             default:
                 std::cout << "Invalid choice. Please try again.\n";
         }
     }
 }
 
+int App::getOptionFromUser() const {
+    int choice;
+    cin >> choice;
+    return choice;
+}
+
+Graph* App::getGraphFromUser() const {
+    cout << "Choose a graph: ";
+    int graphToUse = getOptionFromUser();
+    if (graphToUse < 0 || graphToUse >= NUMBER_GRAPHS) {
+        cout << "Invalid graph choice.\n";
+        return nullptr;
+    }
+    Graph *graph = graphs[graphToUse];
+    if(!graph->isLoaded()){
+        graph->load();
+    }
+    return graph;
+}
+
 void App::menuOption1() {
-    std::cout << "You chose option 1.\n";
+    Graph *graph = getGraphFromUser();
+
     // Implement the functionality for option 1 here
 }
 
 void App::menuOption2() {
-    std::cout << "You chose option 2.\n";
+    Graph *graph = getGraphFromUser();
     // Implement the functionality for option 2 here
+}
+
+void App::menuOption3() {
+    Graph *graph = getGraphFromUser();
+    // Implement the functionality for option 3 here
 }
