@@ -82,15 +82,14 @@ void Graph::loadNodesRWGraph() {
         nodes.push_back(node);
     }
 }
-
-void Graph::loadEdges(){
+void Graph::loadEdges() {
     string path = getPath();
-    if(index > 2){
+    if (index > 2) {
         path += "/edges.csv";
     }
     ifstream file(path);
 
-    if(!file.is_open()) {
+    if (!file.is_open()) {
         cout << "Error opening file" << endl;
         return;
     }
@@ -98,7 +97,22 @@ void Graph::loadEdges(){
     file.ignore(1000, '\n');
     string line;
 
-    while(getline(file, line)){
+    // Get the total number of lines in the file (estimate)
+    file.seekg(0, ios::end);
+    streampos fileSize = file.tellg();
+    file.seekg(0);
+
+    // Estimate the progress based on the file size
+    const float estimatedProgressUnit = static_cast<float>(fileSize) / 100.0;
+
+    // Skip the header line
+    getline(file, line);
+
+    // Loading edges
+    float progress = 0.0;
+    float totalProgress = 0.0;
+
+    while (getline(file, line)) {
         vector<string> row;
         stringstream ss(line);
         string token;
@@ -110,16 +124,35 @@ void Graph::loadEdges(){
         int id2 = stoi(row[1]);
         double distance = stod(row[2]);
 
-        Node *node1 = nodes[id1];
-        Node *node2 = nodes[id2];
+        Node* node1 = nodes[id1];
+        Node* node2 = nodes[id2];
 
         Edge* edge = new Edge(id1, id2, distance);
         edges.push_back(edge);
 
         node1->addEdge(edge);
         node2->addEdge(edge);
+
+        progress += line.size() + 1; // Add the size of the line plus the newline character
+
+        // Update progress bar
+        if (progress >= estimatedProgressUnit) {
+            totalProgress += (progress / estimatedProgressUnit);
+            int progressBarCount = static_cast<int>(totalProgress);
+            cout << "\r" << "[";
+            for (int j = 0; j < progressBarCount; ++j)
+                cout << "#";
+            for (int j = progressBarCount; j < 50; ++j)
+                cout << " ";
+            cout << "] " << static_cast<int>(totalProgress+1) << "%";
+            cout.flush();
+            progress = 0.0;
+        }
     }
+
+    cout << endl;
 }
+
 
 void Graph::load() {
     cout << "Loading graph " << index << endl;
