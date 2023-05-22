@@ -17,7 +17,9 @@ class Graph {
 private:
     int index;
 
-    void loadEdges(string& path);
+    void loadNodesToyGraph();
+    void loadNodesRWGraph();
+    void loadEdges();
 
     string getPath() const;
     int getNumberNodes() const;
@@ -26,10 +28,11 @@ private:
     vector<Edge*> edges;
 public:
     Graph(int index);
-
     void load();
-
     bool isLoaded() const;
+
+    unsigned int tspBT(const unsigned int **dists, unsigned int path[]);
+    void tspBTRec(const unsigned int **dists, unsigned int n, unsigned int curIndex, unsigned int curDist, unsigned int curPath[], unsigned int &minDist, unsigned int path[]);
 };
 
 

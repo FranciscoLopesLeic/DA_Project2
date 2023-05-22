@@ -18,7 +18,6 @@ void App::run() {
         cout << "4. Quit\n";
         cout << "Enter your choice: ";
 
-        cout << "Enter your choice: ";
         int choice = getOptionFromUser();
 
         switch (choice) {
