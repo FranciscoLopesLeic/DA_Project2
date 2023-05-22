@@ -2,34 +2,45 @@
 
 Graph::Graph(int index){
     this->index = index;
+}
 
-    int number_nodes;
-    switch(index) {
+string Graph::getPath() const {
+    switch (index) {
         case 0:
-            number_nodes = GRAPH0_NODES;
-            break;
+            return "../Data/Toy-Graphs/Toy-Graphs/shipping.csv";
         case 1:
-            number_nodes = GRAPH1_NODES;
-            break;
+            return "../Data/Toy-Graphs/Toy-Graphs/stadiums.csv";
         case 2:
-            number_nodes = GRAPH2_NODES;
-            break;
+            return "../Data/Toy-Graphs/Toy-Graphs/tourism.csv";
         case 3:
-            number_nodes = GRAPH3_NODES;
-            break;
+            return "../Data/Real-world Graphs/Real-world Graphs/graph1";
         case 4:
-            number_nodes = GRAPH4_NODES;
-            break;
+            return "../Data/Real-world Graphs/Real-world Graphs/graph2";
         case 5:
-            number_nodes = GRAPH5_NODES;
-            break;
+            return "../Data/Real-world Graphs/Real-world Graphs/graph3";
         default:
             cout << "Invalid graph index" << endl;
-            return;
+            return "";
     }
+}
 
-    for(int i = 0; i < number_nodes; i++) {
-        nodes.push_back(new Node(i));
+int Graph::getNumberNodes() const {
+    switch (index) {
+        case 0:
+            return 14;
+        case 1:
+            return 11;
+        case 2:
+            return 5;
+        case 3:
+            return 1000;
+        case 4:
+            return 5000;
+        case 5:
+            return 10000;
+        default:
+            cout << "Invalid graph index" << endl;
+            return 0;
     }
 }
 
@@ -67,67 +78,21 @@ void Graph::loadEdges(string& path){
     }
 }
 
-void Graph::loadToyGraph() {
-    string path;
-
-    switch (index) {
-        case 0:
-            path = GRAPH0_PATH;
-            break;
-        case 1:
-            path = GRAPH1_PATH;
-            break;
-        case 2:
-            path = GRAPH2_PATH;
-            break;
-        default:
-            cout << "Invalid graph index" << endl;
-            return;
-    }
-
-    loadEdges(path);
-}
-
-void Graph::loadRWGraph() {
-    string folder;
-
-    switch (index) {
-        case 3:
-            folder = GRAPH3_FOLDER;
-            break;
-        case 4:
-            folder = GRAPH4_FOLDER;
-            break;
-        case 5:
-            folder = GRAPH5_FOLDER;
-            break;
-        default:
-            cout << "Invalid graph index" << endl;
-            return;
-    }
-
-    string path = folder + "/edges.csv";
-
-    loadEdges(path);
-}
-
 void Graph::load() {
     cout << "Loading graph " << index << endl;
-    switch (index) {
-        case 0:
-        case 1:
-        case 2:
-            loadToyGraph();
-            break;
-        case 3:
-        case 4:
-        case 5:
-            loadRWGraph();
-            break;
-        default:
-            cout << "Invalid graph index" << endl;
-            break;
+
+    int numberNodes = getNumberNodes();
+    for(int i = 0; i < numberNodes; i++){
+        Node *node = new Node(i);
+        nodes.push_back(node);
     }
+
+    string path = getPath();
+    if(index > 2){
+        path += "/edges.csv";
+    }
+
+    loadEdges(path);
 }
 
 
