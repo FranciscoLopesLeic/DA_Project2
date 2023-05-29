@@ -13,7 +13,7 @@ void App::run() {
     while (true) {
         cout << "Menu:\n";
         cout << "1. Option 1\n";
-        cout << "2. Option 2\n";
+        cout << "2. 2-approximation TSP algorithm\n";
         cout << "3. Option 3\n";
         cout << "4. Quit\n";
         cout << "Enter your choice: ";
@@ -67,7 +67,16 @@ void App::menuOption1() {
 
 void App::menuOption2() {
     Graph *graph = getGraphFromUser();
-    // Implement the functionality for option 2 here
+    if(graph == nullptr){
+        return;
+    }
+    cout << "Starting 2-approximation TSP algorithm!" << endl;
+    vector<int> tspPath = graph->tsp2Approximation();
+    cout << "Finished 2-approximation TSP algorithm!" << endl;
+    for (int i : tspPath) {
+        cout << i << " ";
+    }
+    cout << endl;
 }
 
 void App::menuOption3() {

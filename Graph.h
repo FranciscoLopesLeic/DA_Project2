@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <queue>
 
 #include "Node.h"
 #include "Edge.h"
@@ -33,6 +34,15 @@ public:
 
     unsigned int tspBT(const unsigned int **dists, unsigned int path[]);
     void tspBTRec(const unsigned int **dists, unsigned int n, unsigned int curIndex, unsigned int curDist, unsigned int curPath[], unsigned int &minDist, unsigned int path[]);
+
+    vector<Node*> getNodes() const;
+    vector<Edge*> getEdges() const;
+    void primMST();
+    void preOrderTraversal(int startNode, vector<bool> &visited, vector<int> &result);
+
+    vector<int> tsp2Approximation();
+    float calculateTotalDistance(vector<int> path);
+
 };
 
 

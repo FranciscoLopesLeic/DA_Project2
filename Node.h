@@ -5,6 +5,7 @@
 #include <cmath>
 
 #include "Edge.h"
+#include "Edge.cpp"
 
 using namespace std;
 

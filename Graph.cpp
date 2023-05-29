@@ -127,7 +127,7 @@ void Graph::loadEdges() {
         Node* node1 = nodes[id1];
         Node* node2 = nodes[id2];
 
-        Edge* edge = new Edge(id1, id2, distance);
+        Edge* edge = new Edge(node1, node2, distance);
         edges.push_back(edge);
 
         node1->addEdge(edge);
@@ -211,4 +211,82 @@ unsigned int Graph::tspBT(const unsigned int **dists, unsigned int path[]) {
     // ... so in the first recursive call curIndex starts at 1 rather than 0
     tspBTRec(dists, getNumberNodes(), 1, 0, curPath, minDist, path);
     return minDist;
+}
+
+vector<Node *> Graph::getNodes() const {
+    return nodes;
+}
+
+vector<Edge *> Graph::getEdges() const {
+    return edges;
+}
+
+void Graph::primMST() {
+    int V = nodes.size();
+    vector<int> parent(V);
+    vector<double> key(V, numeric_limits<double>::max());
+    vector<bool> inMST(V, false);
+
+    priority_queue< pair<double, int>, vector <pair<double, int>> , greater<pair<double, int>> > pq;
+
+    pq.push(make_pair(0, 0));
+    key[0] = 0;
+
+    while(!pq.empty()){
+        int u = pq.top().second;
+        pq.pop();
+
+        inMST[u] = true;
+
+        list<Edge*>::iterator i;
+        for(i = nodes[u]->getEdges().begin(); i != nodes[u]->getEdges().end(); ++i){
+            int v = (*i)->getNode2()->getId();
+            double weight = (*i)->getDistance();
+
+            if(inMST[v] == false && key[v] > weight) {
+                key[v] = weight;
+                pq.push(make_pair(key[v], v));
+                parent[v] = u;
+            }
+        }
+    }
+
+    for(int i = 1; i < V; ++i){
+        printf("%d - %d\n", parent[i], i);
+    }
+}
+
+void Graph::preOrderTraversal(int startNode, vector<bool> &visited, vector<int> &result) {
+    visited[startNode] = true;
+    result.push_back(startNode);
+    for(auto i = nodes[startNode]->getEdges().begin(); i != nodes[startNode]->getEdges().end(); ++i){
+        int v = (*i)->getNode2()->getId();
+        if(!visited[v]){
+            preOrderTraversal(v, visited, result);
+        }
+    }
+}
+
+vector<int> Graph::tsp2Approximation() {
+    primMST();
+    vector<bool> visited(nodes.size(), false);
+    vector<int> result;
+    preOrderTraversal(0, visited, result);
+    return result;
+}
+
+float Graph::calculateTotalDistance(vector<int> path) {
+    float total = 0;
+    for (size_t i = 0; i < path.size(); ++i) {
+        int current_node_id = path[i];
+        int next_node_id = (i+1 < path.size()) ? path[i+1] : path[0];
+        for (auto edge : nodes[current_node_id]->getEdges()) {
+            if ((edge->getNode1Id() == current_node_id && edge->getNode2Id() == next_node_id) ||
+                (edge->getNode1Id() == next_node_id && edge->getNode2Id() == current_node_id)) {
+                total += edge->getDistance();
+                break;
+            }
+        }
+    }
+    return total;
 }

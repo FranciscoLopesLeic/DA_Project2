@@ -1,17 +1,20 @@
 #ifndef DA_PROJECT2_EDGE_H
 #define DA_PROJECT2_EDGE_H
 
+class Node;
 
 class Edge {
 private:
-    int node1;
-    int node2;
+    Node* node1;
+    Node* node2;
     double distance;
 
 public:
-    Edge(int node1, int node2, double distance);
-    int getNode1() const;
-    int getNode2() const;
+    Edge(Node* node1, Node* node2, double distance);
+    Node* getNode1() const;
+    Node* getNode2() const;
+    int getNode1Id() const;
+    int getNode2Id() const;
     double getDistance() const;
 };
 
