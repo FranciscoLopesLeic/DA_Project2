@@ -1,6 +1,9 @@
 #include "Graph.h"
 
 Graph::Graph(int index){
+    if(index < 0 || index > 17){
+        throw invalid_argument("Invalid graph index");
+    }
     this->index = index;
 }
 
@@ -18,6 +21,30 @@ string Graph::getPath() const {
             return "../Data/Real-world Graphs/Real-world Graphs/graph2";
         case 5:
             return "../Data/Real-world Graphs/Real-world Graphs/graph3";
+        case 6:
+            return "../Data/Extra_Fully_Connected_Graphs/Extra_Fully_Connected_Graphs/edges_25.csv";
+        case 7:
+            return "../Data/Extra_Fully_Connected_Graphs/Extra_Fully_Connected_Graphs/edges_50.csv";
+        case 8:
+            return "../Data/Extra_Fully_Connected_Graphs/Extra_Fully_Connected_Graphs/edges_75.csv";
+        case 9:
+            return "../Data/Extra_Fully_Connected_Graphs/Extra_Fully_Connected_Graphs/edges_100.csv";
+        case 10:
+            return "../Data/Extra_Fully_Connected_Graphs/Extra_Fully_Connected_Graphs/edges_200.csv";
+        case 11:
+            return "../Data/Extra_Fully_Connected_Graphs/Extra_Fully_Connected_Graphs/edges_300.csv";
+        case 12:
+            return "../Data/Extra_Fully_Connected_Graphs/Extra_Fully_Connected_Graphs/edges_400.csv";
+        case 13:
+            return "../Data/Extra_Fully_Connected_Graphs/Extra_Fully_Connected_Graphs/edges_500.csv";
+        case 14:
+            return "../Data/Extra_Fully_Connected_Graphs/Extra_Fully_Connected_Graphs/edges_600.csv";
+        case 15:
+            return "../Data/Extra_Fully_Connected_Graphs/Extra_Fully_Connected_Graphs/edges_700.csv";
+        case 16:
+            return "../Data/Extra_Fully_Connected_Graphs/Extra_Fully_Connected_Graphs/edges_800.csv";
+        case 17:
+            return "../Data/Extra_Fully_Connected_Graphs/Extra_Fully_Connected_Graphs/edges_900.csv";
         default:
             cout << "Invalid graph index" << endl;
             return "";
@@ -38,13 +65,37 @@ int Graph::getNumberNodes() const {
             return 5000;
         case 5:
             return 10000;
+        case 6:
+            return 25;
+        case 7:
+            return 50;
+        case 8:
+            return 75;
+        case 9:
+            return 100;
+        case 10:
+            return 200;
+        case 11:
+            return 300;
+        case 12:
+            return 400;
+        case 13:
+            return 500;
+        case 14:
+            return 600;
+        case 15:
+            return 700;
+        case 16:
+            return 800;
+        case 17:
+            return 900;
         default:
             cout << "Invalid graph index" << endl;
             return 0;
     }
 }
 
-void Graph::loadNodesToyGraph() {
+void Graph::loadNodesToyAndExtraGraph() {
     int numberNodes = getNumberNodes();
 
     for(int i = 0; i < numberNodes; i++){
@@ -84,7 +135,7 @@ void Graph::loadNodesRWGraph() {
 }
 void Graph::loadEdges() {
     string path = getPath();
-    if (index > 2) {
+    if (index > 2 && index < 6) {
         path += "/edges.csv";
     }
     ifstream file(path);
@@ -103,7 +154,7 @@ void Graph::loadEdges() {
     file.seekg(0);
 
     // Estimate the progress based on the file size
-    const float estimatedProgressUnit = static_cast<float>(fileSize) / 100.0;
+    const double estimatedProgressUnit = static_cast<float>(fileSize) / 100.0;
 
     // Skip the header line
     getline(file, line);
@@ -135,8 +186,8 @@ void Graph::loadEdges() {
 
         progress += line.size() + 1; // Add the size of the line plus the newline character
 
-        // Update progress bar
-        if (progress >= estimatedProgressUnit) {
+        //Update progress bar
+        if (progress >= estimatedProgressUnit && index > 2 && index < 6) {
             totalProgress += (progress / estimatedProgressUnit);
             int progressBarCount = static_cast<int>(totalProgress);
             cout << "\r" << "[";
@@ -157,8 +208,8 @@ void Graph::loadEdges() {
 void Graph::load() {
     cout << "Loading graph " << index << endl;
 
-    if(index <= 2){
-        loadNodesToyGraph();
+    if(index <= 2 || index >= 6){
+        loadNodesToyAndExtraGraph();
     }
     else{
         loadNodesRWGraph();
@@ -171,44 +222,42 @@ bool Graph::isLoaded() const {
     return !edges.empty();
 }
 
-void Graph::tspBTRec(const unsigned int **dists, unsigned int n, unsigned int curIndex, unsigned int curDist, unsigned int curPath[], unsigned int &minDist, unsigned int path[]) {
-    if(curIndex == n) {
+void Graph::tspBTRec(unsigned int curIndex, unsigned int curDist, unsigned int curPath[], unsigned int& minDist, unsigned int path[]) {
+    if (curIndex == getNumberNodes()) {
         // add the distance back to the initial node
-        curDist += dists[curPath[n - 1]][curPath[0]];
-        if(curDist < minDist) {
+        curDist += nodes[curPath[getNumberNodes() - 1]]->getDistanceToAdjacentNode(curPath[0]);
+        if (curDist < minDist) {
             minDist = curDist;
             // Copy the current state to the array storing the best state found so far
-            for(unsigned int i = 0; i < n; i++) {
+            for (unsigned int i = 0; i < getNumberNodes(); i++) {
                 path[i] = curPath[i];
             }
         }
         return;
     }
     // Try to move to the i-th vertex if the total distance does not exceed the best distance found and the vertex is not yet visited in curPath
-    for(unsigned int i = 1; i < n; i++) { // i starts at 1 and not 0 since it is assumed that node 0 is the initial node so it will not be in the middle of the path
-        if(curDist + dists[curPath[curIndex - 1]][i] < minDist) {
-            bool isNewVertex = true;
-            for(unsigned int j = 1; j < curIndex; j++) {
-                if(curPath[j] == i) {
-                    isNewVertex = false;
-                    break;
-                }
-            }
-            if(isNewVertex) {
-                curPath[curIndex] = i;
-                tspBTRec(dists,n,curIndex+1,curDist + dists[curPath[curIndex - 1]][curPath[curIndex]],curPath,minDist,path);
-            }
+    for (const Edge* edge : nodes[curPath[curIndex - 1]]->getEdges()) {
+        unsigned int i = (edge->getNode1() == curPath[curIndex - 1]) ? edge->getNode2() : edge->getNode1();
+        if (!nodes[i]->isVisited() && curDist + edge->getDistance() < minDist) {
+            nodes[i]->setVisited(true);
+            curPath[curIndex] = i;
+            tspBTRec(curIndex + 1, curDist + edge->getDistance(), curPath, minDist, path);
+            nodes[i]->setVisited(false);
         }
     }
 }
 
-unsigned int Graph::tspBT(const unsigned int **dists, unsigned int path[]) {
+unsigned int Graph::TSP_Backtracking(unsigned int path[]) {
     unsigned int curPath[getNumberNodes()]; // static memory allocation is faster :)
     unsigned int minDist = std::numeric_limits<unsigned int>::max();
 
     // Assumes path starts at node 0 ...
     curPath[0] = 0;
+    nodes[0]->setVisited(true);
     // ... so in the first recursive call curIndex starts at 1 rather than 0
-    tspBTRec(dists, getNumberNodes(), 1, 0, curPath, minDist, path);
+    tspBTRec(1, 0, curPath, minDist, path);
+    nodes[0]->setVisited(false);
     return minDist;
 }
+
+

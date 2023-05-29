@@ -11,10 +11,10 @@ App::App() {
 
 void App::run() {
     while (true) {
-        cout << "Menu:\n";
-        cout << "1. Option 1\n";
-        cout << "2. Option 2\n";
-        cout << "3. Option 3\n";
+        cout << "SELECT A STRATEGY:\n";
+        cout << "1. Backtracking algorithm\n";
+        cout << "2. Triangular Approximation\n";
+        cout << "3. Our heuristics\n";
         cout << "4. Quit\n";
         cout << "Enter your choice: ";
 
@@ -46,9 +46,13 @@ int App::getOptionFromUser() const {
 }
 
 Graph* App::getGraphFromUser() const {
-    cout << "Choose a graph: ";
+    cout << "SELECT A GRAPH:\n";
+    cout << ">> 0-2 are toy graphs\n";
+    cout << ">> 3-5 are real-world graphs\n";
+    cout << ">> 6-17 are extra graphs\n";
+    cout << "Your choice: ";
     int graphToUse = getOptionFromUser();
-    if (graphToUse < 0 || graphToUse >= NUMBER_GRAPHS) {
+    if (graphToUse < 0 || graphToUse > NUMBER_GRAPHS) {
         cout << "Invalid graph choice.\n";
         return nullptr;
     }
@@ -61,8 +65,21 @@ Graph* App::getGraphFromUser() const {
 
 void App::menuOption1() {
     Graph *graph = getGraphFromUser();
-
-    // Implement the functionality for option 1 here
+    /*
+    cout << "Enter the starting node: ";
+    unsigned int startingNode = getOptionFromUser();
+    if (startingNode >= graph->getNumberNodes()) {
+        cout << "Invalid starting node.\n";
+        return;
+    }
+     */
+    unsigned int path[graph->getNumberNodes()];
+    unsigned int distance = graph->TSP_Backtracking(path);
+    cout << "The shortest path is: ";
+    for (int i = 0; i < graph->getNumberNodes(); i++) {
+        cout << path[i] << " ";
+    }
+    cout << "\nThe distance is: " << distance << endl;
 }
 
 void App::menuOption2() {

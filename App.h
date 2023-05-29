@@ -11,7 +11,7 @@ public:
     void run();
 
 private:
-    static const int NUMBER_GRAPHS = 6;
+    static const int NUMBER_GRAPHS = 18;
 
     vector<Graph*> graphs;
     void menuOption1();
