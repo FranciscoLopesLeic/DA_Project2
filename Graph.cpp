@@ -222,8 +222,8 @@ bool Graph::isLoaded() const {
     return !edges.empty();
 }
 
-void Graph::tspBTRec(unsigned int curIndex, unsigned int curDist, unsigned int curPath[], unsigned int& minDist, unsigned int path[]) {
-    if (curIndex == getNumberNodes()) {
+void Graph::tspBTRec(unsigned int visitedNodes, unsigned int curIndex, unsigned int curDist, unsigned int curPath[], unsigned int& minDist, unsigned int path[]) {
+    if (visitedNodes == getNumberNodes()) {
         // add the distance back to the initial node
         curDist += nodes[curPath[getNumberNodes() - 1]]->getDistanceToAdjacentNode(curPath[0]);
         if (curDist < minDist) {
@@ -241,23 +241,35 @@ void Graph::tspBTRec(unsigned int curIndex, unsigned int curDist, unsigned int c
         if (!nodes[i]->isVisited() && curDist + edge->getDistance() < minDist) {
             nodes[i]->setVisited(true);
             curPath[curIndex] = i;
-            tspBTRec(curIndex + 1, curDist + edge->getDistance(), curPath, minDist, path);
+            tspBTRec(visitedNodes + 1, (curIndex + 1) % getNumberNodes(), curDist + edge->getDistance(), curPath, minDist, path);
             nodes[i]->setVisited(false);
         }
     }
 }
 
-unsigned int Graph::TSP_Backtracking(unsigned int path[]) {
+unsigned int Graph::TSP_Backtracking(unsigned int startingNode, unsigned int path[]) {
+    resetNodes();
+
+    // Reset visited flag for all nodes
+    for (Node* node : nodes) {
+        node->setVisited(false);
+    }
+
     unsigned int curPath[getNumberNodes()]; // static memory allocation is faster :)
     unsigned int minDist = std::numeric_limits<unsigned int>::max();
 
     // Assumes path starts at node 0 ...
-    curPath[0] = 0;
-    nodes[0]->setVisited(true);
+    curPath[0] = startingNode;
+    nodes[startingNode]->setVisited(true);
     // ... so in the first recursive call curIndex starts at 1 rather than 0
-    tspBTRec(1, 0, curPath, minDist, path);
-    nodes[0]->setVisited(false);
+    tspBTRec(1, 1, 0, curPath, minDist, path);
+    nodes[startingNode]->setVisited(false);
     return minDist;
 }
 
-
+void Graph::resetNodes() {
+    for (Node* node : nodes) {
+        node->setVisited(false);
+        node->setPrevious(-1);
+    }
+}

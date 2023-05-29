@@ -65,16 +65,16 @@ Graph* App::getGraphFromUser() const {
 
 void App::menuOption1() {
     Graph *graph = getGraphFromUser();
-    /*
+
     cout << "Enter the starting node: ";
     unsigned int startingNode = getOptionFromUser();
     if (startingNode >= graph->getNumberNodes()) {
         cout << "Invalid starting node.\n";
         return;
     }
-     */
+
     unsigned int path[graph->getNumberNodes()];
-    unsigned int distance = graph->TSP_Backtracking(path);
+    unsigned int distance = graph->TSP_Backtracking(startingNode ,path);
     cout << "The shortest path is: ";
     for (int i = 0; i < graph->getNumberNodes(); i++) {
         cout << path[i] << " ";

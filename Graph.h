@@ -20,6 +20,7 @@ private:
     void loadNodesToyAndExtraGraph();
     void loadNodesRWGraph();
     void loadEdges();
+    void resetNodes();
 
     string getPath() const;
 
@@ -32,8 +33,8 @@ public:
 
     int getNumberNodes() const;
 
-    unsigned int TSP_Backtracking(unsigned int path[]);
-    void tspBTRec(unsigned int curIndex, unsigned int curDist, unsigned int curPath[], unsigned int& minDist, unsigned int path[]);
+    unsigned int TSP_Backtracking(unsigned int startingNode, unsigned int path[]);
+    void tspBTRec(unsigned int visitedNodes, unsigned int curIndex, unsigned int curDist, unsigned int curPath[], unsigned int& minDist, unsigned int path[]);
 };
 
 
