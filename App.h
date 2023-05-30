@@ -3,6 +3,8 @@
 
 #include "Graph.h"
 
+#include <chrono>
+
 using namespace std;
 
 class App{
@@ -18,7 +20,6 @@ private:
     void menuOption2();
     void menuOption3();
 
-    int getOptionFromUser() const;
     Graph* getGraphFromUser() const;
 };
 

@@ -206,7 +206,7 @@ void Graph::loadEdges() {
 
 
 void Graph::load() {
-    cout << "Loading graph " << index << endl;
+    cout << "Loading graph " << index << "...";
 
     if(index <= 2 || index >= 6){
         loadNodesToyAndExtraGraph();
@@ -215,49 +215,14 @@ void Graph::load() {
         loadNodesRWGraph();
     }
     loadEdges();
+
+    cout << "Graph "<< index <<  " loaded successfully!\n" << endl;
 }
 
 
 bool Graph::isLoaded() const {
     return !edges.empty();
 }
-
-void Graph::TSP_BT_rec(unsigned int visitedNodes, unsigned int curIndex, double curDist, vector<unsigned int>& curPath, double& minDist, vector<unsigned int>& path) {
-    if (visitedNodes == getNumberNodes()) {
-        curDist += nodes[curPath[getNumberNodes() - 1]]->getDistanceTo(nodes[curPath[0]]);
-        if (curDist < minDist) {
-            path.clear();
-            minDist = curDist;
-            for (unsigned int i = 0; i < getNumberNodes(); i++) {
-                path.push_back(curPath[i]);
-            }
-        }
-        return;
-    }
-    for (const Edge* edge : nodes[curPath[curIndex - 1]]->getEdges()) {
-        unsigned int i = (edge->getNode1() == curPath[curIndex - 1]) ? edge->getNode2() : edge->getNode1();
-        if (!nodes[i]->isVisited() && curDist + edge->getDistance() < minDist) {
-            nodes[i]->setVisited(true);
-            curPath[curIndex] = i;
-            TSP_BT_rec(visitedNodes + 1, (curIndex + 1) % getNumberNodes(), curDist +
-                    nodes[curPath[curIndex - 1]]->getDistanceTo(nodes[i]), curPath, minDist, path);
-            nodes[i]->setVisited(false);
-        }
-    }
-}
-
-double Graph::TSP_Backtracking(unsigned int startingNode, vector<unsigned int>& path) {
-    resetNodes();
-
-    vector<unsigned int> curPath(getNumberNodes());
-    double minDist = std::numeric_limits<double>::max();
-
-    curPath[0] = startingNode;
-    nodes[startingNode]->setVisited(true);
-    TSP_BT_rec(1, 1, 0, curPath, minDist, path);
-    return minDist;
-}
-
 
 void Graph::resetNodes() {
     for (Node* node : nodes) {
@@ -266,13 +231,45 @@ void Graph::resetNodes() {
     }
 }
 
-void Graph::print() const{
-    for(auto node : nodes){
-        cout << "Node " << node->getId() << endl;
-        cout << "Edges: " << endl;
-        for(auto edge : node->getEdges()){
-            cout << edge->getNode1() << " - " << edge->getNode2() << " distance: " << edge->getDistance() << endl;
+void Graph::TSP_Backtracking_aux(unsigned int curIndex, unsigned int count, double cost, double &ans, vector<unsigned int> &path, vector<vector<unsigned int>> paths){
+    if (count == nodes.size()){
+        for (auto e : nodes[curIndex]->getEdges()){
+            if (e->getNode1() == 0 || e->getNode2() == 0){
+                double new_cost = cost + e->getDistance();
+                if (new_cost < ans){
+                    ans = new_cost;
+                    path = paths[curIndex];
+                }
+            }
         }
-        cout << endl;
+        return;
     }
+
+    for (auto e : nodes[curIndex]->getEdges()){
+        int nextPos = e->getNode1() == curIndex ? e->getNode2() : e->getNode1();
+        if (!nodes[nextPos]->isVisited()){
+            nodes[nextPos]->setVisited(true);
+            paths[nextPos] = paths[curIndex];
+            paths[nextPos].push_back(nextPos);
+
+            TSP_Backtracking_aux(nextPos, count + 1, cost + e->getDistance(), ans, path, paths);
+            nodes[nextPos]->setVisited(false);
+        }
+    }
+}
+
+pair<double, vector<unsigned int>> Graph::TSP_Backtracking(){
+    resetNodes();
+    nodes[0]->setVisited(true);
+
+    double shortestDistance = std::numeric_limits<double>::max();
+    vector<vector<unsigned int>> paths(nodes.size());
+    vector<unsigned int> path(nodes.size());
+    paths[0].push_back(0);
+
+    TSP_Backtracking_aux(0, 1, 0, shortestDistance, path, paths);
+
+    path.push_back(0);
+
+    return make_pair(shortestDistance, path);
 }

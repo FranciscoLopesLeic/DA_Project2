@@ -8,10 +8,23 @@ App::App() {
     }
 }
 
+void waitForKey() {
+    cout << "\nPress ENTER to continue";
+    cin.ignore();
+    cin.get();
+}
+
+
+int getOptionFromUser() {
+    int choice;
+    cin >> choice;
+    return choice;
+}
+
 
 void App::run() {
     while (true) {
-        cout << "\n\n=========== SELECT A STRATEGY ===========\n";
+        cout << "\n\n=========== SELECT A STRATEGY TO SOLVE T.S.P. ===========\n";
         cout << "1. Backtracking algorithm\n";
         cout << "2. Triangular Approximation\n";
         cout << "3. Our heuristics\n";
@@ -39,12 +52,6 @@ void App::run() {
     }
 }
 
-int App::getOptionFromUser() const {
-    int choice;
-    cin >> choice;
-    return choice;
-}
-
 Graph* App::getGraphFromUser() const {
     cout << "\n\n=========== SELECT A GRAPH ===========\n";
     cout << ">> 0-2 are toy graphs (shipping.csv, stadiums.csv, tourism.csv)\n";
@@ -66,28 +73,30 @@ Graph* App::getGraphFromUser() const {
 void App::menuOption1() {
     Graph *graph = getGraphFromUser();
 
-    cout << "Enter the starting node: ";
-    unsigned int startingNode = getOptionFromUser();
-    if (startingNode >= graph->getNumberNodes()) {
-        cout << "Invalid starting node.\n";
-        return;
-    }
+    cout << "Running backtracking algorithm...\n";
+    auto startTime = std::chrono::high_resolution_clock::now();
+    auto result = graph->TSP_Backtracking();
+    auto endTime = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 
-    vector<unsigned int> path(graph->getNumberNodes());
-    double distance = graph->TSP_Backtracking(startingNode, path);
-    cout << "The shortest path is: ";
-    for (int i = 0; i < graph->getNumberNodes(); i++) {
-        cout << path[i] << " ";
+    cout << "\nThe shortest path is: ";
+    for (unsigned int i : result.second) {
+        cout << i << " ";
     }
-    cout << "\nThe distance is: " << distance << endl;
+    cout << "\nThe distance is: " << result.first << endl;
+    cout << "Time spent: " << duration.count() << " milliseconds" << endl;
+
+    waitForKey();
 }
 
 void App::menuOption2() {
     Graph *graph = getGraphFromUser();
-    graphs[1]->print();
+    // Implement the functionality for option 2 here
+    waitForKey();
 }
 
 void App::menuOption3() {
     Graph *graph = getGraphFromUser();
     // Implement the functionality for option 3 here
+    waitForKey();
 }
