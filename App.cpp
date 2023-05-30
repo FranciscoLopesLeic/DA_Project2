@@ -73,7 +73,7 @@ void App::menuOption1() {
         return;
     }
 
-    unsigned int path[graph->getNumberNodes()];
+    vector<unsigned int> path(graph->getNumberNodes());
     unsigned int distance = graph->TSP_Backtracking(startingNode ,path);
     cout << "The shortest path is: ";
     for (int i = 0; i < graph->getNumberNodes(); i++) {

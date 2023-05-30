@@ -222,50 +222,42 @@ bool Graph::isLoaded() const {
     return !edges.empty();
 }
 
-void Graph::tspBTRec(unsigned int visitedNodes, unsigned int curIndex, unsigned int curDist, unsigned int curPath[], unsigned int& minDist, unsigned int path[]) {
+void Graph::TSP_BT_rec(unsigned int visitedNodes, unsigned int curIndex, double curDist, vector<unsigned int>& curPath, double& minDist, vector<unsigned int>& path) {
     if (visitedNodes == getNumberNodes()) {
-        // add the distance back to the initial node
-        curDist += nodes[curPath[getNumberNodes() - 1]]->getDistanceToAdjacentNode(curPath[0]);
+        curDist += nodes[curPath[getNumberNodes() - 1]]->getDistanceToAdjacentNode(nodes[curPath[0]]->getId());
         if (curDist < minDist) {
             minDist = curDist;
-            // Copy the current state to the array storing the best state found so far
             for (unsigned int i = 0; i < getNumberNodes(); i++) {
                 path[i] = curPath[i];
             }
         }
         return;
     }
-    // Try to move to the i-th vertex if the total distance does not exceed the best distance found and the vertex is not yet visited in curPath
     for (const Edge* edge : nodes[curPath[curIndex - 1]]->getEdges()) {
         unsigned int i = (edge->getNode1() == curPath[curIndex - 1]) ? edge->getNode2() : edge->getNode1();
         if (!nodes[i]->isVisited() && curDist + edge->getDistance() < minDist) {
             nodes[i]->setVisited(true);
             curPath[curIndex] = i;
-            tspBTRec(visitedNodes + 1, (curIndex + 1) % getNumberNodes(), curDist + edge->getDistance(), curPath, minDist, path);
+            TSP_BT_rec(visitedNodes + 1, (curIndex + 1) % getNumberNodes(), curDist + nodes[curPath[curIndex - 1]]->getDistanceToAdjacentNode(nodes[i]->getId()), curPath, minDist, path);
             nodes[i]->setVisited(false);
         }
     }
 }
 
-unsigned int Graph::TSP_Backtracking(unsigned int startingNode, unsigned int path[]) {
+double Graph::TSP_Backtracking(unsigned int startingNode, vector<unsigned int>& path) {
     resetNodes();
 
-    // Reset visited flag for all nodes
-    for (Node* node : nodes) {
-        node->setVisited(false);
-    }
+    vector<unsigned int> curPath(getNumberNodes());
+    double minDist = std::numeric_limits<double>::max();
 
-    unsigned int curPath[getNumberNodes()]; // static memory allocation is faster :)
-    unsigned int minDist = std::numeric_limits<unsigned int>::max();
-
-    // Assumes path starts at node 0 ...
     curPath[0] = startingNode;
     nodes[startingNode]->setVisited(true);
-    // ... so in the first recursive call curIndex starts at 1 rather than 0
-    tspBTRec(1, 1, 0, curPath, minDist, path);
+    TSP_BT_rec(1, 1, 0, curPath, minDist, path);
     nodes[startingNode]->setVisited(false);
     return minDist;
 }
+
+
 
 void Graph::resetNodes() {
     for (Node* node : nodes) {

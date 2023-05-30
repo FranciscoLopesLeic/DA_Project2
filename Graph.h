@@ -33,8 +33,8 @@ public:
 
     int getNumberNodes() const;
 
-    unsigned int TSP_Backtracking(unsigned int startingNode, unsigned int path[]);
-    void tspBTRec(unsigned int visitedNodes, unsigned int curIndex, unsigned int curDist, unsigned int curPath[], unsigned int& minDist, unsigned int path[]);
+    double TSP_Backtracking(unsigned int startingNode, vector<unsigned int>& path);
+    void TSP_BT_rec(unsigned int visitedNodes, unsigned int curIndex, double curDist, vector<unsigned int>& curPath, double& minDist, vector<unsigned int>& path);
 };
 
 
