@@ -224,11 +224,12 @@ bool Graph::isLoaded() const {
 
 void Graph::TSP_BT_rec(unsigned int visitedNodes, unsigned int curIndex, double curDist, vector<unsigned int>& curPath, double& minDist, vector<unsigned int>& path) {
     if (visitedNodes == getNumberNodes()) {
-        curDist += nodes[curPath[getNumberNodes() - 1]]->getDistanceToAdjacentNode(nodes[curPath[0]]->getId());
+        curDist += nodes[curPath[getNumberNodes() - 1]]->getDistanceTo(nodes[curPath[0]]);
         if (curDist < minDist) {
+            path.clear();
             minDist = curDist;
             for (unsigned int i = 0; i < getNumberNodes(); i++) {
-                path[i] = curPath[i];
+                path.push_back(curPath[i]);
             }
         }
         return;
@@ -238,7 +239,8 @@ void Graph::TSP_BT_rec(unsigned int visitedNodes, unsigned int curIndex, double 
         if (!nodes[i]->isVisited() && curDist + edge->getDistance() < minDist) {
             nodes[i]->setVisited(true);
             curPath[curIndex] = i;
-            TSP_BT_rec(visitedNodes + 1, (curIndex + 1) % getNumberNodes(), curDist + nodes[curPath[curIndex - 1]]->getDistanceToAdjacentNode(nodes[i]->getId()), curPath, minDist, path);
+            TSP_BT_rec(visitedNodes + 1, (curIndex + 1) % getNumberNodes(), curDist +
+                    nodes[curPath[curIndex - 1]]->getDistanceTo(nodes[i]), curPath, minDist, path);
             nodes[i]->setVisited(false);
         }
     }
@@ -253,15 +255,24 @@ double Graph::TSP_Backtracking(unsigned int startingNode, vector<unsigned int>& 
     curPath[0] = startingNode;
     nodes[startingNode]->setVisited(true);
     TSP_BT_rec(1, 1, 0, curPath, minDist, path);
-    nodes[startingNode]->setVisited(false);
     return minDist;
 }
-
 
 
 void Graph::resetNodes() {
     for (Node* node : nodes) {
         node->setVisited(false);
         node->setPrevious(-1);
+    }
+}
+
+void Graph::print() const{
+    for(auto node : nodes){
+        cout << "Node " << node->getId() << endl;
+        cout << "Edges: " << endl;
+        for(auto edge : node->getEdges()){
+            cout << edge->getNode1() << " - " << edge->getNode2() << " distance: " << edge->getDistance() << endl;
+        }
+        cout << endl;
     }
 }

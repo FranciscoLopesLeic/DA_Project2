@@ -11,7 +11,7 @@ App::App() {
 
 void App::run() {
     while (true) {
-        cout << "SELECT A STRATEGY:\n";
+        cout << "\n\n=========== SELECT A STRATEGY ===========\n";
         cout << "1. Backtracking algorithm\n";
         cout << "2. Triangular Approximation\n";
         cout << "3. Our heuristics\n";
@@ -31,7 +31,7 @@ void App::run() {
                 menuOption3();
                 break;
             case 4:
-                std::cout << "Goodbye!\n";
+                std::cout << "\nGoodbye!\n";
                 return;
             default:
                 std::cout << "Invalid choice. Please try again.\n";
@@ -46,8 +46,8 @@ int App::getOptionFromUser() const {
 }
 
 Graph* App::getGraphFromUser() const {
-    cout << "SELECT A GRAPH:\n";
-    cout << ">> 0-2 are toy graphs\n";
+    cout << "\n\n=========== SELECT A GRAPH ===========\n";
+    cout << ">> 0-2 are toy graphs (shipping.csv, stadiums.csv, tourism.csv)\n";
     cout << ">> 3-5 are real-world graphs\n";
     cout << ">> 6-17 are extra graphs\n";
     cout << "Your choice: ";
@@ -74,7 +74,7 @@ void App::menuOption1() {
     }
 
     vector<unsigned int> path(graph->getNumberNodes());
-    unsigned int distance = graph->TSP_Backtracking(startingNode ,path);
+    double distance = graph->TSP_Backtracking(startingNode, path);
     cout << "The shortest path is: ";
     for (int i = 0; i < graph->getNumberNodes(); i++) {
         cout << path[i] << " ";
@@ -84,7 +84,7 @@ void App::menuOption1() {
 
 void App::menuOption2() {
     Graph *graph = getGraphFromUser();
-    // Implement the functionality for option 2 here
+    graphs[1]->print();
 }
 
 void App::menuOption3() {

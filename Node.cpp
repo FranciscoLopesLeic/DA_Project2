@@ -52,13 +52,14 @@ double Node::getLongitude() const {
     return longitude;
 }
 
-double Node::getDistanceToAdjacentNode(int id) const {
+double Node::getDistanceTo(Node* other) const {
+    int id2 = other->getId();
     for(Edge* edge : edges){
-        if(edge->getNode1() == id || edge->getNode2() == id){
+        if(edge->getNode1() == id2 || edge->getNode2() == id2){
             return edge->getDistance();
         }
     }
-    return -1;
+    return this->getHaversineDistanceTo(other);
 }
 
 double Node::getHaversineDistanceTo(Node* node) const {

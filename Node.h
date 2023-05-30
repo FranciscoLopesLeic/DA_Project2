@@ -21,8 +21,7 @@ public:
     void setVisited(bool v);
     double getLatitude() const;
     double getLongitude() const;
-    double getHaversineDistanceTo(Node* node) const;
-    double getDistanceToAdjacentNode(int id) const;
+    double getDistanceTo(Node* other) const;
 
 private:
     int id;
@@ -31,6 +30,7 @@ private:
     list<Edge*> edges;
     int previous;
     bool visited;
+    double getHaversineDistanceTo(Node* node) const;
 
 };
 

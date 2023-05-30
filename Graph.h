@@ -35,6 +35,8 @@ public:
 
     double TSP_Backtracking(unsigned int startingNode, vector<unsigned int>& path);
     void TSP_BT_rec(unsigned int visitedNodes, unsigned int curIndex, double curDist, vector<unsigned int>& curPath, double& minDist, vector<unsigned int>& path);
+
+    void print() const;
 };
 
 
