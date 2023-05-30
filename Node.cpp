@@ -4,15 +4,15 @@ Node::Node(int id) {
     this->id = id;
     this->latitude = -1;
     this->longitude = -1;
-    this->previous = -1;
+    this->path = nullptr;
     this->visited = false;
+    this->distance = numeric_limits<double>::infinity();
 }
 
 Node::Node(int id, double latitude, double longitude) {
     this->id = id;
     this->latitude = latitude;
     this->longitude = longitude;
-    this->previous = -1;
     this->visited = false;
 }
 
@@ -28,13 +28,6 @@ void Node::addEdge(Edge* edge) {
     edges.push_back(edge);
 }
 
-int Node::getPrevious() const {
-    return previous;
-}
-
-void Node::setPrevious(int prev) {
-    this->previous = prev;
-}
 
 bool Node::isVisited() const {
     return visited;
@@ -80,4 +73,24 @@ double Node::getHaversineDistanceTo(Node* node) const {
     double c = 2 * atan2(sqrt(a), sqrt(1-a));
 
     return R * c; // in metres
+}
+
+void Node::setPath(Edge* p){
+    this->path = p;
+}
+
+Edge* Node::getPath() const {
+    return path;
+}
+
+void Node::setDistance(double d){
+    this->distance = d;
+}
+
+double Node::getDistance() const {
+    return distance;
+}
+
+bool Node::operator<(Node& node) const {
+    return this->distance < node.distance;
 }

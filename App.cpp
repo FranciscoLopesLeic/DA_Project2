@@ -9,7 +9,7 @@ App::App() {
 }
 
 void waitForKey() {
-    cout << "\nPress ENTER to continue";
+    cout << "\nPress ENTER to continue ";
     cin.ignore();
     cin.get();
 }
@@ -91,7 +91,20 @@ void App::menuOption1() {
 
 void App::menuOption2() {
     Graph *graph = getGraphFromUser();
-    // Implement the functionality for option 2 here
+
+    cout << "Running triangular approximation algorithm...\n";
+    auto startTime = std::chrono::high_resolution_clock::now();
+    auto result = graph->TSP_TriangularApproximation();
+    auto endTime = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+
+    cout << "\nThe shortest path is: ";
+    for (unsigned int i : result.second) {
+        cout << i << " ";
+    }
+    cout << "\nThe distance is: " << result.first << endl;
+    cout << "Time spent: " << duration.count() << " milliseconds" << endl;
+
     waitForKey();
 }
 

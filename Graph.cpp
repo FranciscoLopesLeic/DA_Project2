@@ -227,7 +227,8 @@ bool Graph::isLoaded() const {
 void Graph::resetNodes() {
     for (Node* node : nodes) {
         node->setVisited(false);
-        node->setPrevious(-1);
+        node->setPath(nullptr);
+        node->setDistance(numeric_limits<double>::infinity());
     }
 }
 
@@ -272,4 +273,77 @@ pair<double, vector<unsigned int>> Graph::TSP_Backtracking(){
     path.push_back(0);
 
     return make_pair(shortestDistance, path);
+}
+
+void Graph::prim_generate_MST(int startId, double &totalCost){
+    resetNodes();
+
+    Node* startNode = nodes[startId];
+    MutablePriorityQueue<Node> q;
+
+    for(auto node: nodes){
+        q.insert(node);
+    }
+
+    startNode->setDistance(0);
+    q.decreaseKey(startNode);
+
+    while(!q.empty()){
+        Node* curNode = q.extractMin();
+        curNode->setVisited(true);
+
+        for(auto edge: curNode->getEdges()){
+            Node* nextNode = edge->getNode1() == curNode->getId() ? nodes[edge->getNode2()] : nodes[edge->getNode1()];
+
+            if(!nextNode->isVisited() && edge->getDistance() < nextNode->getDistance()){
+                nextNode->setDistance(edge->getDistance());
+                nextNode->setPath(edge);
+                q.decreaseKey(nextNode);
+            }
+        }
+        if(curNode->getPath() != nullptr){
+            curNode->getPath()->setSelected(true);
+            totalCost += curNode->getPath()->getDistance();
+        }
+    }
+}
+
+vector<unsigned int> Graph::tour_MST(int startId, double &totalCost){
+    for(auto node: nodes){
+        node->setVisited(false);
+    }
+
+    vector<unsigned int> path;
+    stack<unsigned int> s;
+    s.push(startId);
+
+    while(!s.empty()){
+        unsigned int curId = s.top();
+        s.pop();
+        Node* curNode = nodes[curId];
+
+        if(curNode->isVisited()){
+            continue;
+        }
+
+        curNode->setVisited(true);
+        path.push_back(curId);
+
+        for(auto edge: curNode->getEdges()){
+            if(edge->isSelected()){
+                int nextId = edge->getNode1() == curId ? edge->getNode2() : edge->getNode1();
+                s.push(nextId);
+            }
+        }
+    }
+    return path;
+}
+
+pair<double, vector<unsigned int>> Graph::TSP_TriangularApproximation(){
+    resetNodes();
+    double totalCost = 0;
+    prim_generate_MST(0, totalCost);
+    auto path = tour_MST(0, totalCost);
+    path.push_back(0);
+    return make_pair(totalCost, path);
 }

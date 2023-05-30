@@ -10,25 +10,31 @@ using namespace std;
 
 class Node {
 public:
+    int queueIndex = 0;
     Node(int id);
     Node(int id, double latitude, double longitude);
     int getId() const;
     list<Edge*> getEdges() const;
     void addEdge(Edge* edge);
-    int getPrevious() const;
-    void setPrevious(int prev);
     bool isVisited() const;
     void setVisited(bool v);
     double getLatitude() const;
     double getLongitude() const;
     double getDistanceTo(Node* other) const;
+    void setPath(Edge* p);
+    Edge* getPath() const;
+    void setDistance(double d);
+    double getDistance() const;
+
+    bool operator<(Node& node) const;
 
 private:
     int id;
     double latitude;
     double longitude;
+    double distance;
     list<Edge*> edges;
-    int previous;
+    Edge* path;
     bool visited;
     double getHaversineDistanceTo(Node* node) const;
 
