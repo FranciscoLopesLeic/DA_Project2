@@ -278,7 +278,7 @@ pair<double, vector<unsigned int>> Graph::TSP_Backtracking(){
 vector<unsigned int> Graph::prim_generate_MST(){
     resetNodes();
 
-    vector<unsigned int> path;
+    vector<unsigned int> mst;
 
     MutablePriorityQueue<Node> q;
 
@@ -294,7 +294,7 @@ vector<unsigned int> Graph::prim_generate_MST(){
     while(!q.empty()){
         Node* curNode = q.extractMin();
         curNode->setVisited(true);
-        path.push_back(curNode->getId());
+        mst.push_back(curNode->getId());
 
         for(auto edge: curNode->getEdges()){
             int nextId = edge->getNode1() == curNode->getId() ? edge->getNode2() : edge->getNode1();
@@ -304,14 +304,30 @@ vector<unsigned int> Graph::prim_generate_MST(){
                 nextNode->setDistance(edge->getDistance());
                 nextNode->setPath(edge);
                 q.decreaseKey(nextNode);
+                edge->setSelected(true);
             }
         }
     }
 
-    return path;
+    return mst;
 }
 
-double Graph::getPathCost(vector<unsigned int>& path) const{
+void Graph::dfs_MST(unsigned int root, vector<unsigned int> &path) {
+    Node* curNode = nodes[root];
+    curNode->setVisited(true);
+    path.push_back(root);
+
+    for(auto edge: curNode->getEdges()){
+        int nextId = edge->getNode1() == curNode->getId() ? edge->getNode2() : edge->getNode1();
+        Node* nextNode = nodes[nextId];
+
+        if(!nextNode->isVisited() && edge->isSelected()){
+            dfs_MST(nextId, path);
+        }
+    }
+}
+
+double Graph::getPathCost(vector<unsigned int> path) const{
     double cost = 0;
     for(int i = 0; i < path.size() - 1; i++){
         Node* current = nodes[path[i]];
@@ -322,9 +338,24 @@ double Graph::getPathCost(vector<unsigned int>& path) const{
 }
 
 pair<double, vector<unsigned int>> Graph::TSP_TriangularApproximation(){
-    resetNodes();
-    auto path = prim_generate_MST();
-    path.push_back(0);
-    double cost = getPathCost(path);
-    return make_pair(cost, path);
+    auto mst = prim_generate_MST();
+    mst.push_back(0);
+    double cost = getPathCost(mst);
+    return make_pair(cost, mst);
+
+    /*
+        prim_generate_MST();
+        vector<unsigned int> path;
+        for (auto node : nodes) {
+            node->setVisited(false);
+        }
+        dfs_MST(0, path);
+        path.push_back(0);
+        double cost = getPathCost(path);
+        return make_pair(cost, path);
+     */
+}
+
+bool Graph::isRW() const {
+    return index >= 3 && index <= 5;
 }

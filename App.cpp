@@ -98,10 +98,13 @@ void App::menuOption1() {
     auto endTime = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 
-    cout << "\nThe shortest path is: ";
-    for (unsigned int i : result.second) {
-        cout << i << " ";
+    if(!graph->isRW()){
+        cout << "\nThe shortest path is: ";
+        for (unsigned int i : result.second) {
+            cout << i << " ";
+        }
     }
+
     cout << "\nThe distance is: " << result.first << endl;
     cout << "Time spent: " << duration.count() << " milliseconds" << endl;
 
@@ -120,10 +123,13 @@ void App::menuOption2() {
     auto endTime = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 
-    cout << "\nThe shortest path is: ";
-    for (unsigned int i : result.second) {
-        cout << i << " ";
+    if(!graph->isRW()){
+        cout << "\nThe shortest path is: ";
+        for (unsigned int i : result.second) {
+            cout << i << " ";
+        }
     }
+
     cout << "\nThe distance is: " << result.first << endl;
     cout << "Time spent: " << duration.count() << " milliseconds" << endl;
 

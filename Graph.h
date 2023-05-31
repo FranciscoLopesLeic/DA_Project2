@@ -34,12 +34,14 @@ public:
     void load();
     bool isLoaded() const;
     int getNumberNodes() const;
+    bool isRW() const;
 
     void TSP_Backtracking_aux(unsigned int curIndex, unsigned int count, double cost, double &ans, vector<unsigned int> &path, vector<vector<unsigned int>> paths);
     pair<double, vector<unsigned int>> TSP_Backtracking();
 
     vector<unsigned int> prim_generate_MST();
-    double getPathCost(vector<unsigned int>& path) const;
+    void dfs_MST(unsigned int root, vector<unsigned int> &path);
+    double getPathCost(vector<unsigned int> path) const;
     pair<double, vector<unsigned int>> TSP_TriangularApproximation();
 };
 
