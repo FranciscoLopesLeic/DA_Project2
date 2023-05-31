@@ -38,8 +38,8 @@ public:
     void TSP_Backtracking_aux(unsigned int curIndex, unsigned int count, double cost, double &ans, vector<unsigned int> &path, vector<vector<unsigned int>> paths);
     pair<double, vector<unsigned int>> TSP_Backtracking();
 
-    void prim_generate_MST(int startId, double &totalCost);
-    vector<unsigned int> tour_MST(int startId, double &totalCost);
+    vector<unsigned int> prim_generate_MST();
+    double getPathCost(vector<unsigned int>& path) const;
     pair<double, vector<unsigned int>> TSP_TriangularApproximation();
 };
 

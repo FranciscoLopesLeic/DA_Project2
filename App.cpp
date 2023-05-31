@@ -54,12 +54,27 @@ void App::run() {
 
 Graph* App::getGraphFromUser() const {
     cout << "\n\n=========== SELECT A GRAPH ===========\n";
-    cout << ">> 0-2 are toy graphs (shipping.csv, stadiums.csv, tourism.csv)\n";
-    cout << ">> 3-5 are real-world graphs\n";
-    cout << ">> 6-17 are extra graphs\n";
-    cout << "Your choice: ";
+    cout << "0. shipping.csv (toy)\n";
+    cout << "1. stadiums.csv (toy)\n";
+    cout << "2. tourism.csv (toy)\n";
+    cout << "3. graph1 (real world)\n";
+    cout << "4. graph2 (real world)\n";
+    cout << "5. graph3 (real world)\n";
+    cout << "6. edges_25.csv (extra)\n";
+    cout << "7. edges_50.csv (extra)\n";
+    cout << "8. edges_75.csv (extra)\n";
+    cout << "9. edges_100.csv (extra)\n";
+    cout << "10. edges_200.csv (extra)\n";
+    cout << "11. edges_300.csv (extra)\n";
+    cout << "12. edges_400.csv (extra)\n";
+    cout << "13. edges_500.csv (extra)\n";
+    cout << "14. edges_600.csv (extra)\n";
+    cout << "15. edges_700.csv (extra)\n";
+    cout << "16. edges_800.csv (extra)\n";
+    cout << "17. edges_900.csv (extra)\n";
+    cout << "Enter your choice: ";
     int graphToUse = getOptionFromUser();
-    if (graphToUse < 0 || graphToUse > NUMBER_GRAPHS) {
+    if (graphToUse < 0 || graphToUse >= NUMBER_GRAPHS) {
         cout << "Invalid graph choice.\n";
         return nullptr;
     }
