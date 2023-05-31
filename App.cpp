@@ -54,31 +54,32 @@ void App::run() {
 
 Graph* App::getGraphFromUser() const {
     cout << "\n\n=========== SELECT A GRAPH ===========\n";
-    cout << "0. shipping.csv (toy)\n";
-    cout << "1. stadiums.csv (toy)\n";
-    cout << "2. tourism.csv (toy)\n";
-    cout << "3. graph1 (real world)\n";
-    cout << "4. graph2 (real world)\n";
-    cout << "5. graph3 (real world)\n";
-    cout << "6. edges_25.csv (extra)\n";
-    cout << "7. edges_50.csv (extra)\n";
-    cout << "8. edges_75.csv (extra)\n";
-    cout << "9. edges_100.csv (extra)\n";
-    cout << "10. edges_200.csv (extra)\n";
-    cout << "11. edges_300.csv (extra)\n";
-    cout << "12. edges_400.csv (extra)\n";
-    cout << "13. edges_500.csv (extra)\n";
-    cout << "14. edges_600.csv (extra)\n";
-    cout << "15. edges_700.csv (extra)\n";
-    cout << "16. edges_800.csv (extra)\n";
-    cout << "17. edges_900.csv (extra)\n";
+    cout << "0. Go back\n";
+    cout << "1. shipping.csv (toy)\n";
+    cout << "2. stadiums.csv (toy)\n";
+    cout << "3. tourism.csv (toy)\n";
+    cout << "4. graph1 (real world)\n";
+    cout << "5. graph2 (real world)\n";
+    cout << "6. graph3 (real world)\n";
+    cout << "7. edges_25.csv (extra)\n";
+    cout << "8. edges_50.csv (extra)\n";
+    cout << "9. edges_75.csv (extra)\n";
+    cout << "10. edges_100.csv (extra)\n";
+    cout << "11. edges_200.csv (extra)\n";
+    cout << "12. edges_300.csv (extra)\n";
+    cout << "13. edges_400.csv (extra)\n";
+    cout << "14. edges_500.csv (extra)\n";
+    cout << "15. edges_600.csv (extra)\n";
+    cout << "16. edges_700.csv (extra)\n";
+    cout << "17. edges_800.csv (extra)\n";
+    cout << "18. edges_900.csv (extra)\n";
     cout << "Enter your choice: ";
     int graphToUse = getOptionFromUser();
-    if (graphToUse < 0 || graphToUse >= NUMBER_GRAPHS) {
+    if (graphToUse <= 0 || graphToUse > NUMBER_GRAPHS) {
         cout << "Invalid graph choice.\n";
         return nullptr;
     }
-    Graph *graph = graphs[graphToUse];
+    Graph *graph = graphs[graphToUse-1];
     if(!graph->isLoaded()){
         graph->load();
     }
@@ -87,6 +88,9 @@ Graph* App::getGraphFromUser() const {
 
 void App::menuOption1() {
     Graph *graph = getGraphFromUser();
+    if(graph == nullptr){
+        return;
+    }
 
     cout << "Running backtracking algorithm...\n";
     auto startTime = std::chrono::high_resolution_clock::now();
@@ -106,6 +110,9 @@ void App::menuOption1() {
 
 void App::menuOption2() {
     Graph *graph = getGraphFromUser();
+    if(graph == nullptr){
+        return;
+    }
 
     cout << "Running triangular approximation algorithm...\n";
     auto startTime = std::chrono::high_resolution_clock::now();
@@ -125,6 +132,9 @@ void App::menuOption2() {
 
 void App::menuOption3() {
     Graph *graph = getGraphFromUser();
+    if(graph == nullptr){
+        return;
+    }
     // Implement the functionality for option 3 here
     waitForKey();
 }
