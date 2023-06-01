@@ -81,7 +81,11 @@ Graph* App::getGraphFromUser() const {
     }
     Graph *graph = graphs[graphToUse-1];
     if(!graph->isLoaded()){
+        auto startTime = std::chrono::high_resolution_clock::now();
         graph->load();
+        auto endTime = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+        cout << "Time spent loading: " << duration.count() << " milliseconds\n\n";
     }
     return graph;
 }
@@ -98,6 +102,7 @@ void App::menuOption1() {
     auto endTime = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 
+    cout << "\n>>> RESULT: ";
     if(graph->isToy()){
         cout << "\nThe shortest path is: ";
         for (unsigned int i : result.second) {
@@ -123,6 +128,7 @@ void App::menuOption2() {
     auto endTime = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 
+    cout << "\n>>> RESULT: ";
     if(graph->isToy()){
         cout << "\nThe shortest path is: ";
         for (unsigned int i : result.second) {

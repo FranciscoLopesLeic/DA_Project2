@@ -57,23 +57,17 @@ double Node::getDistanceTo(Node* other) const {
 }
 
 double Node::getHaversineDistanceTo(Node* node) const {
-    double lat1 = this->latitude;
-    double lon1 = this->longitude;
-    double lat2 = node->getLatitude();
-    double lon2 = node->getLongitude();
 
-    double R = 6371e3; // metres
-    double phi1 = lat1 * M_PI / 180; // φ, λ in radians
-    double phi2 = lat2 * M_PI / 180;
-    double deltaPhi = (lat2-lat1) * M_PI / 180;
-    double deltaLambda = (lon2-lon1) * M_PI / 180;
-
-    double a = sin(deltaPhi/2) * sin(deltaPhi/2) +
-            cos(phi1) * cos(phi2) *
-            sin(deltaLambda/2) * sin(deltaLambda/2);
-    double c = 2 * atan2(sqrt(a), sqrt(1-a));
-
-    return R * c; // in metres
+    double rad_lat1 = this->latitude * M_PI / 180;
+    double rad_lon1 = this->longitude * M_PI / 180;
+    double rad_lat2 = node->getLatitude() * M_PI / 180;
+    double rad_lon2 = node->getLongitude() * M_PI / 180;
+    double delta_lat = rad_lat2 - rad_lat1;
+    double delta_lon = rad_lon2 - rad_lon1;
+    double aux = pow(sin(delta_lat/2), 2) + cos(rad_lat1) * cos(rad_lat2) * pow(sin(delta_lon/2), 2);
+    double c = 2.0 * atan2(sqrt(aux), sqrt(1.0-aux));
+    double earthradius = 6371000;
+    return earthradius * c;
 }
 
 void Node::setPath(Edge* p){

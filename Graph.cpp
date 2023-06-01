@@ -193,7 +193,7 @@ void Graph::loadEdges() {
             cout << "\r" << "[";
             for (int j = 0; j < progressBarCount; ++j)
                 cout << "#";
-            for (int j = progressBarCount; j < 50; ++j)
+            for (int j = progressBarCount; j < 100; ++j)
                 cout << " ";
             cout << "] " << static_cast<int>(totalProgress+1) << "%";
             cout.flush();
@@ -206,7 +206,7 @@ void Graph::loadEdges() {
 
 
 void Graph::load() {
-    cout << "Loading graph " << index << "...";
+    cout << "\nLoading graph...";
 
     if(index <= 2 || index >= 6){
         loadNodesToyAndExtraGraph();
@@ -216,7 +216,7 @@ void Graph::load() {
     }
     loadEdges();
 
-    cout << "Graph "<< index <<  " loaded successfully!\n" << endl;
+    cout << "Graph loaded successfully!\n";
 }
 
 
@@ -275,9 +275,9 @@ pair<double, vector<unsigned int>> Graph::TSP_Backtracking(){
     return make_pair(shortestDistance, path);
 }
 
-vector<unsigned int> Graph::prim_generate_MST(){
+list<unsigned int> Graph::prim_generate_MST(){
 
-    vector<unsigned int> mst;
+    list<unsigned int> mst;
 
     MutablePriorityQueue<Node> q;
 
@@ -286,6 +286,10 @@ vector<unsigned int> Graph::prim_generate_MST(){
         node->setPath(nullptr);
         node->setVisited(false);
         q.insert(node);
+    }
+
+    for(auto edge: edges){
+        edge->setSelected(false);
     }
 
     Node* startNode = nodes[0];
@@ -313,7 +317,7 @@ vector<unsigned int> Graph::prim_generate_MST(){
     return mst;
 }
 
-void Graph::dfs_MST(unsigned int root, vector<unsigned int> &path) {
+void Graph::dfs_MST(unsigned int root, list<unsigned int> &path) {
     Node* curNode = nodes[root];
     curNode->setVisited(true);
     path.push_back(root);
@@ -328,8 +332,9 @@ void Graph::dfs_MST(unsigned int root, vector<unsigned int> &path) {
     }
 }
 
-double Graph::getPathCost(vector<unsigned int> path) const{
+double Graph::getPathCost(list<unsigned int> path) const{
     double cost = 0;
+    /*
     for(int i = 0; i < path.size() - 1; i++){
         Node* current = nodes[path[i]];
         Node* next = nodes[path[i+1]];
@@ -340,26 +345,45 @@ double Graph::getPathCost(vector<unsigned int> path) const{
         }
         cost += edge? edge->getDistance() : current->getHaversineDistanceTo(next);
     }
+     */
+
+    // iterate in list
+    auto it = path.begin();
+    auto it2 = path.begin();
+    it2++;
+    for (; it2 != path.end(); it++, it2++) {
+        Node* current = nodes[*it];
+        Node* next = nodes[*it2];
+
+        Edge* edge = current->getEdgeTo(next);
+        if(edge == nullptr && !this->isRW()){
+            return -1;
+        }
+        cost += edge? edge->getDistance() : current->getHaversineDistanceTo(next);
+    }
     return cost;
 }
 
-pair<double, vector<unsigned int>> Graph::TSP_TriangularApproximation(){
+pair<double, list<unsigned int>> Graph::TSP_TriangularApproximation(){
+
+    /*
     auto mst = prim_generate_MST();
     mst.push_back(0);
     double cost = getPathCost(mst);
     return make_pair(cost, mst);
-
-    /*
-        prim_generate_MST();
-        vector<unsigned int> path;
-        for (auto node : nodes) {
-            node->setVisited(false);
-        }
-        dfs_MST(0, path);
-        path.push_back(0);
-        double cost = getPathCost(path);
-        return make_pair(cost, path);
      */
+
+
+    prim_generate_MST();
+    list<unsigned int> path;
+    for (auto node : nodes) {
+        node->setVisited(false);
+    }
+    dfs_MST(0, path);
+    path.push_back(0);
+    double cost = getPathCost(path);
+    return make_pair(cost, path);
+
 }
 
 bool Graph::isRW() const {

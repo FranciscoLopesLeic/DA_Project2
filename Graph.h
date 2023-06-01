@@ -40,10 +40,10 @@ public:
     void TSP_Backtracking_aux(unsigned int curIndex, unsigned int count, double cost, double &ans, vector<unsigned int> &path, vector<vector<unsigned int>> paths);
     pair<double, vector<unsigned int>> TSP_Backtracking();
 
-    vector<unsigned int> prim_generate_MST();
-    void dfs_MST(unsigned int root, vector<unsigned int> &path);
-    double getPathCost(vector<unsigned int> path) const;
-    pair<double, vector<unsigned int>> TSP_TriangularApproximation();
+    list<unsigned int> prim_generate_MST();
+    void dfs_MST(unsigned int root, list<unsigned int> &path);
+    double getPathCost(list<unsigned int> path) const;
+    pair<double, list<unsigned int>> TSP_TriangularApproximation();
 };
 
 
