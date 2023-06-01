@@ -38,7 +38,6 @@ private:
     list<Edge*> edges;
     Edge* path;
     bool visited;
-
 };
 
 

@@ -128,6 +128,12 @@ void App::menuOption2() {
     auto endTime = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 
+    if(result.first == -1){
+        cout << "\n>>> It was not possible to find a path\n";
+        waitForKey();
+        return;
+    }
+
     cout << "\n>>> RESULT: ";
     if(graph->isToy()){
         cout << "\nThe shortest path is: ";

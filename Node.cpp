@@ -13,7 +13,9 @@ Node::Node(int id, double latitude, double longitude) {
     this->id = id;
     this->latitude = latitude;
     this->longitude = longitude;
+    this->path = nullptr;
     this->visited = false;
+    this->distance = numeric_limits<double>::infinity();
 }
 
 int Node::getId() const {
