@@ -2,8 +2,8 @@
 
 Node::Node(int id) {
     this->id = id;
-    this->latitude = -1;
-    this->longitude = -1;
+    this->latitude = 0;
+    this->longitude = 0;
     this->path = nullptr;
     this->visited = false;
     this->distance = numeric_limits<double>::infinity();
@@ -49,6 +49,7 @@ double Node::getDistanceTo(Node* other) const {
     int id2 = other->getId();
     for(Edge* edge : edges){
         if(edge->getNode1() == id2 || edge->getNode2() == id2){
+            edge->print();
             return edge->getDistance();
         }
     }
@@ -93,4 +94,14 @@ double Node::getDistance() const {
 
 bool Node::operator<(Node& node) const {
     return this->distance < node.distance;
+}
+
+Edge* Node::getEdgeTo(Node* node) const {
+    int id2 = node->getId();
+    for(Edge* edge : edges){
+        if(edge->getNode1() == id2 || edge->getNode2() == id2){
+            return edge;
+        }
+    }
+    return nullptr;
 }

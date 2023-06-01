@@ -23,3 +23,7 @@ bool Edge::isSelected() const {
 void Edge::setSelected(bool s) {
     this->selected = s;
 }
+
+void Edge::print() {
+    std::cout << "Edge: " << node1 << " " << node2 << " " << distance << std::endl;
+}

@@ -25,6 +25,8 @@ public:
     Edge* getPath() const;
     void setDistance(double d);
     double getDistance() const;
+    Edge* getEdgeTo(Node* node) const;
+    double getHaversineDistanceTo(Node* node) const;
 
     bool operator<(Node& node) const;
 
@@ -36,7 +38,6 @@ private:
     list<Edge*> edges;
     Edge* path;
     bool visited;
-    double getHaversineDistanceTo(Node* node) const;
 
 };
 

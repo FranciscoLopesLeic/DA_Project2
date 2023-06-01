@@ -276,20 +276,21 @@ pair<double, vector<unsigned int>> Graph::TSP_Backtracking(){
 }
 
 vector<unsigned int> Graph::prim_generate_MST(){
-    resetNodes();
 
     vector<unsigned int> mst;
 
     MutablePriorityQueue<Node> q;
 
     for(auto node: nodes){
+        node->setDistance(numeric_limits<double>::infinity());
+        node->setPath(nullptr);
+        node->setVisited(false);
         q.insert(node);
     }
 
     Node* startNode = nodes[0];
     startNode->setDistance(0);
     q.decreaseKey(startNode);
-
 
     while(!q.empty()){
         Node* curNode = q.extractMin();
@@ -332,7 +333,12 @@ double Graph::getPathCost(vector<unsigned int> path) const{
     for(int i = 0; i < path.size() - 1; i++){
         Node* current = nodes[path[i]];
         Node* next = nodes[path[i+1]];
-        cost += current->getDistanceTo(next);
+
+        Edge* edge = current->getEdgeTo(next);
+        if(edge == nullptr && !this->isRW()){
+            return -1;
+        }
+        cost += edge? edge->getDistance() : current->getHaversineDistanceTo(next);
     }
     return cost;
 }
@@ -358,4 +364,8 @@ pair<double, vector<unsigned int>> Graph::TSP_TriangularApproximation(){
 
 bool Graph::isRW() const {
     return index >= 3 && index <= 5;
+}
+
+bool Graph::isToy() const {
+    return index <= 2;
 }

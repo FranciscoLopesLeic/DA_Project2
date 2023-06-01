@@ -35,6 +35,7 @@ public:
     bool isLoaded() const;
     int getNumberNodes() const;
     bool isRW() const;
+    bool isToy() const;
 
     void TSP_Backtracking_aux(unsigned int curIndex, unsigned int count, double cost, double &ans, vector<unsigned int> &path, vector<vector<unsigned int>> paths);
     pair<double, vector<unsigned int>> TSP_Backtracking();

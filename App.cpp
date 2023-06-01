@@ -98,7 +98,7 @@ void App::menuOption1() {
     auto endTime = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 
-    if(!graph->isRW()){
+    if(graph->isToy()){
         cout << "\nThe shortest path is: ";
         for (unsigned int i : result.second) {
             cout << i << " ";
@@ -123,7 +123,7 @@ void App::menuOption2() {
     auto endTime = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 
-    if(!graph->isRW()){
+    if(graph->isToy()){
         cout << "\nThe shortest path is: ";
         for (unsigned int i : result.second) {
             cout << i << " ";

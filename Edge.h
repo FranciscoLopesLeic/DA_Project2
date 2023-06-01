@@ -1,6 +1,7 @@
 #ifndef DA_PROJECT2_EDGE_H
 #define DA_PROJECT2_EDGE_H
 
+#include <iostream>
 
 class Edge {
 private:
@@ -16,6 +17,7 @@ public:
     double getDistance() const;
     bool isSelected() const;
     void setSelected(bool s);
+    void print();
 };
 
 
