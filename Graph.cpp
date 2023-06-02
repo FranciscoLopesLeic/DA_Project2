@@ -253,7 +253,6 @@ void Graph::TSP_Backtracking_aux(unsigned int curIndex, unsigned int count, doub
 }
 
 pair<double, vector<unsigned int>> Graph::TSP_Backtracking(){
-
     for (auto node : nodes)
         node->setVisited(false);
 
@@ -271,48 +270,44 @@ pair<double, vector<unsigned int>> Graph::TSP_Backtracking(){
     return make_pair(shortestDistance, path);
 }
 
-list<unsigned int> Graph::prim_generate_MST(){
-    list<unsigned int> mst;
-    MutablePriorityQueue<Node> q;
-
-    for(auto node: nodes){
-        node->setDistance(numeric_limits<double>::infinity());
-        node->setPath(nullptr);
+void Graph::prim_generate_MST(){
+    for (Node* node : nodes) {
         node->setVisited(false);
-        q.insert(node);
     }
 
-    for(auto edge: edges){
-        edge->setSelected(false);
-    }
+    priority_queue<Edge*, vector<Edge*>, function<bool(Edge*, Edge*)>> pq
+                                        ([](Edge* a, Edge* b) {return a->getDistance() > b->getDistance();});
 
-    Node* startNode = nodes[0];
-    startNode->setDistance(0);
-    q.decreaseKey(startNode);
+    unsigned int sourceId = 0;
+    nodes[sourceId]->setVisited(true);
 
-    while(!q.empty()){
-        Node* curNode = q.extractMin();
-        curNode->setVisited(true);
-        mst.push_back(curNode->getId());
+    for (Edge* edge : nodes[sourceId]->getEdges()) {pq.push(edge);}
 
-        for(auto edge: curNode->getEdges()){
-            int nextId = edge->getNode1() == curNode->getId() ? edge->getNode2() : edge->getNode1();
-            Node* nextNode = nodes[nextId];
+    while (!pq.empty()) {
+        Edge *curEdge = pq.top();
+        pq.pop();
 
-            if(!nextNode->isVisited() && edge->getDistance() < nextNode->getDistance()){
-                nextNode->setDistance(edge->getDistance());
-                nextNode->setPath(edge);
-                edge->setSelected(true);
-                q.decreaseKey(nextNode);
+        Node *source = curEdge->getNode1() == sourceId ? nodes[curEdge->getNode1()] : nodes[curEdge->getNode2()];
+        Node *dest = curEdge->getNode1() == sourceId ? nodes[curEdge->getNode2()] : nodes[curEdge->getNode1()];
+
+        sourceId = dest->getId();
+
+        if (source->isVisited() && dest->isVisited())
+            continue;
+
+        curEdge->setSelected(true);
+        dest->setVisited(true);
+
+        for (Edge *edge: dest->getEdges()) {
+            if (!edge->isSelected()) {
+                pq.push(edge);
             }
         }
     }
 
-    for (auto node : nodes) {
+    for (Node* node : nodes) {
         node->setVisited(false);
     }
-
-    return mst;
 }
 
 void Graph::dfsMST(unsigned int curIndex, list<unsigned int> &path){
@@ -350,21 +345,12 @@ double Graph::getPathCost(list<unsigned int> path) const{
 }
 
 pair<double, list<unsigned int>> Graph::TSP_TriangularApproximation(){
-
-    /*
-    auto mst = prim_generate_MST();
-    mst.push_back(0);
-    double cost = getPathCost(mst);
-    return make_pair(cost, mst);
-     */
-
     prim_generate_MST();
     list<unsigned int> order;
     dfsMST(0, order);
     order.push_back(0);
     double cost = getPathCost(order);
     return make_pair(cost, order);
-
 }
 
 bool Graph::isRW() const {
