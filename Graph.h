@@ -22,7 +22,6 @@ private:
     void loadNodesToyAndExtraGraph();
     void loadNodesRWGraph();
     void loadEdges();
-    void resetNodes();
 
     string getPath() const;
 
@@ -41,7 +40,7 @@ public:
     pair<double, vector<unsigned int>> TSP_Backtracking();
 
     list<unsigned int> prim_generate_MST();
-    void dfs_MST(unsigned int root, list<unsigned int> &path);
+    void dfsMST(unsigned int curIndex, list<unsigned int> &path);
     double getPathCost(list<unsigned int> path) const;
     pair<double, list<unsigned int>> TSP_TriangularApproximation();
 };
