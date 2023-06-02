@@ -1,3 +1,8 @@
+/**
+ * @file MutablePriorityQueue.h
+ * @brief Definition of the MutablePriorityQueue class template.
+ */
+
 #ifndef DA_TP_CLASSES_MUTABLEPRIORITYQUEUE
 #define DA_TP_CLASSES_MUTABLEPRIORITYQUEUE
 
