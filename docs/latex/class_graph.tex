@@ -1,0 +1,50 @@
+\hypertarget{class_graph}{}\doxysection{Graph Class Reference}
+\label{class_graph}\index{Graph@{Graph}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_graph_ae667aabc7dd2b367fe7e85137d34fe7d}\label{class_graph_ae667aabc7dd2b367fe7e85137d34fe7d}} 
+{\bfseries Graph} (int index)
+\item 
+\mbox{\Hypertarget{class_graph_a0d11b0b054ac694670cc181182bd1a13}\label{class_graph_a0d11b0b054ac694670cc181182bd1a13}} 
+void {\bfseries load} ()
+\item 
+\mbox{\Hypertarget{class_graph_ab30b72c872269a6343cda95ec16029fc}\label{class_graph_ab30b72c872269a6343cda95ec16029fc}} 
+bool {\bfseries is\+Loaded} () const
+\item 
+\mbox{\Hypertarget{class_graph_a94f577a0e433cce571ca1645cacd953b}\label{class_graph_a94f577a0e433cce571ca1645cacd953b}} 
+int {\bfseries get\+Number\+Nodes} () const
+\item 
+\mbox{\Hypertarget{class_graph_a738592ef34aeaa7484f7900bf1129fbc}\label{class_graph_a738592ef34aeaa7484f7900bf1129fbc}} 
+bool {\bfseries is\+RW} () const
+\item 
+\mbox{\Hypertarget{class_graph_a976b9c4998f7b287bcb5c47d61687679}\label{class_graph_a976b9c4998f7b287bcb5c47d61687679}} 
+bool {\bfseries is\+Toy} () const
+\item 
+\mbox{\Hypertarget{class_graph_a4abb02831571ae1354d72bb91c83a18c}\label{class_graph_a4abb02831571ae1354d72bb91c83a18c}} 
+void {\bfseries backtracking\+\_\+aux} (unsigned int cur\+Index, unsigned int count, double cost, double \&ans, vector$<$ unsigned int $>$ \&path, vector$<$ vector$<$ unsigned int $>$ $>$ paths)
+\item 
+\mbox{\Hypertarget{class_graph_af26041b3bd0e0c26621304694ddc62a4}\label{class_graph_af26041b3bd0e0c26621304694ddc62a4}} 
+pair$<$ double, vector$<$ unsigned int $>$ $>$ {\bfseries TSP\+\_\+\+Backtracking} ()
+\item 
+\mbox{\Hypertarget{class_graph_a6931e78d7e74b005ccff2553f49c40e9}\label{class_graph_a6931e78d7e74b005ccff2553f49c40e9}} 
+void {\bfseries prim\+\_\+generate\+\_\+\+MST} ()
+\item 
+\mbox{\Hypertarget{class_graph_afac48c4c876f2273b177faa3e63e10a3}\label{class_graph_afac48c4c876f2273b177faa3e63e10a3}} 
+void {\bfseries dfs\+MST} (unsigned int cur\+Index, list$<$ unsigned int $>$ \&path)
+\item 
+\mbox{\Hypertarget{class_graph_ac364ddd54da7c0cbcda5622aeb1a5d42}\label{class_graph_ac364ddd54da7c0cbcda5622aeb1a5d42}} 
+double {\bfseries get\+Path\+Cost} (list$<$ unsigned int $>$ path) const
+\item 
+\mbox{\Hypertarget{class_graph_aa375e0098734a0b6b3dc41078a086e0b}\label{class_graph_aa375e0098734a0b6b3dc41078a086e0b}} 
+pair$<$ double, list$<$ unsigned int $>$ $>$ {\bfseries TSP\+\_\+\+Triangular\+Approximation} ()
+\item 
+\mbox{\Hypertarget{class_graph_ab2f2d08a270140c05e70816b06e4583b}\label{class_graph_ab2f2d08a270140c05e70816b06e4583b}} 
+pair$<$ double, vector$<$ unsigned int $>$ $>$ {\bfseries TSP\+\_\+\+Nearest\+Insertion} ()
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Graph.\+h\item 
+Graph.\+cpp\end{DoxyCompactItemize}

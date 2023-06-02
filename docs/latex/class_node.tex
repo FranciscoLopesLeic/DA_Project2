@@ -1,0 +1,68 @@
+\hypertarget{class_node}{}\doxysection{Node Class Reference}
+\label{class_node}\index{Node@{Node}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_node_a7f1af54cb91467d9717155c8a2ac0fde}\label{class_node_a7f1af54cb91467d9717155c8a2ac0fde}} 
+{\bfseries Node} (int id)
+\item 
+\mbox{\Hypertarget{class_node_a98db01d6afb7b7552e89c42d1080e9a3}\label{class_node_a98db01d6afb7b7552e89c42d1080e9a3}} 
+{\bfseries Node} (int id, double latitude, double longitude)
+\item 
+\mbox{\Hypertarget{class_node_a04d6761bf0ead66eb628a6ef5abc34e1}\label{class_node_a04d6761bf0ead66eb628a6ef5abc34e1}} 
+int {\bfseries get\+Id} () const
+\item 
+\mbox{\Hypertarget{class_node_aad60201495d0f0d361bb9dce7b446b94}\label{class_node_aad60201495d0f0d361bb9dce7b446b94}} 
+list$<$ \mbox{\hyperlink{class_edge}{Edge}} $\ast$ $>$ {\bfseries get\+Edges} () const
+\item 
+\mbox{\Hypertarget{class_node_af761aaef36a761a90c4f148a6add914d}\label{class_node_af761aaef36a761a90c4f148a6add914d}} 
+void {\bfseries add\+Edge} (\mbox{\hyperlink{class_edge}{Edge}} $\ast$edge)
+\item 
+\mbox{\Hypertarget{class_node_a97dd8f95e09a0516f8939627f94bd58e}\label{class_node_a97dd8f95e09a0516f8939627f94bd58e}} 
+bool {\bfseries is\+Visited} () const
+\item 
+\mbox{\Hypertarget{class_node_a3f7d26b0d04878659f4ef852bf02173c}\label{class_node_a3f7d26b0d04878659f4ef852bf02173c}} 
+void {\bfseries set\+Visited} (bool v)
+\item 
+\mbox{\Hypertarget{class_node_a6a76240688eddc8a2942618074e28c92}\label{class_node_a6a76240688eddc8a2942618074e28c92}} 
+double {\bfseries get\+Latitude} () const
+\item 
+\mbox{\Hypertarget{class_node_ad4a79ebbcca46dae4638ffbe4d732399}\label{class_node_ad4a79ebbcca46dae4638ffbe4d732399}} 
+double {\bfseries get\+Longitude} () const
+\item 
+\mbox{\Hypertarget{class_node_a12376170cc912e53d16243ba36cec2a1}\label{class_node_a12376170cc912e53d16243ba36cec2a1}} 
+double {\bfseries get\+Distance\+To} (\mbox{\hyperlink{class_node}{Node}} $\ast$other) const
+\item 
+\mbox{\Hypertarget{class_node_a4fb6a0ff9f7838ee52df4f60a973a434}\label{class_node_a4fb6a0ff9f7838ee52df4f60a973a434}} 
+void {\bfseries set\+Path} (\mbox{\hyperlink{class_edge}{Edge}} $\ast$p)
+\item 
+\mbox{\Hypertarget{class_node_aa65cdeade5f183eea5b8642b9a37acbe}\label{class_node_aa65cdeade5f183eea5b8642b9a37acbe}} 
+\mbox{\hyperlink{class_edge}{Edge}} $\ast$ {\bfseries get\+Path} () const
+\item 
+\mbox{\Hypertarget{class_node_aa7ce9ce9bfb3476389742f3ce4e050e0}\label{class_node_aa7ce9ce9bfb3476389742f3ce4e050e0}} 
+void {\bfseries set\+Distance} (double d)
+\item 
+\mbox{\Hypertarget{class_node_aac8835a020aafb6196ce9f871a270272}\label{class_node_aac8835a020aafb6196ce9f871a270272}} 
+double {\bfseries get\+Distance} () const
+\item 
+\mbox{\Hypertarget{class_node_a8827cc7d8be2a63b7a7960c98405c28b}\label{class_node_a8827cc7d8be2a63b7a7960c98405c28b}} 
+\mbox{\hyperlink{class_edge}{Edge}} $\ast$ {\bfseries get\+Edge\+To} (\mbox{\hyperlink{class_node}{Node}} $\ast$node) const
+\item 
+\mbox{\Hypertarget{class_node_a2e631a4535bcdba655112aeedd078a99}\label{class_node_a2e631a4535bcdba655112aeedd078a99}} 
+double {\bfseries get\+Haversine\+Distance\+To} (\mbox{\hyperlink{class_node}{Node}} $\ast$node) const
+\item 
+\mbox{\Hypertarget{class_node_a53d6bc446575b5a6e472e347964d9b34}\label{class_node_a53d6bc446575b5a6e472e347964d9b34}} 
+bool {\bfseries operator$<$} (\mbox{\hyperlink{class_node}{Node}} \&node) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_node_a01788c18aef94f986ec563e8233365c1}\label{class_node_a01788c18aef94f986ec563e8233365c1}} 
+int {\bfseries queue\+Index} = 0
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Node.\+h\item 
+Node.\+cpp\end{DoxyCompactItemize}

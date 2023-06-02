@@ -1,0 +1,49 @@
+\hypertarget{_node_8h_source}{}\doxysection{Node.\+h}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#ifndef DA\_PROJECT2\_NODE\_H}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#define DA\_PROJECT2\_NODE\_H}}
+\DoxyCodeLine{3 }
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <list>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <cmath>}}
+\DoxyCodeLine{6 }
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}Edge.h"{}}}
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 \textcolor{keyword}{using namespace }std;}
+\DoxyCodeLine{10 }
+\DoxyCodeLine{11 \textcolor{keyword}{class }\mbox{\hyperlink{class_node}{Node}} \{}
+\DoxyCodeLine{12 \textcolor{keyword}{public}:}
+\DoxyCodeLine{13     \textcolor{keywordtype}{int} queueIndex = 0;}
+\DoxyCodeLine{14     \mbox{\hyperlink{class_node}{Node}}(\textcolor{keywordtype}{int} \textcolor{keywordtype}{id});}
+\DoxyCodeLine{15     \mbox{\hyperlink{class_node}{Node}}(\textcolor{keywordtype}{int} \textcolor{keywordtype}{id}, \textcolor{keywordtype}{double} latitude, \textcolor{keywordtype}{double} longitude);}
+\DoxyCodeLine{16     \textcolor{keywordtype}{int} getId() \textcolor{keyword}{const};}
+\DoxyCodeLine{17     list<Edge*> getEdges() \textcolor{keyword}{const};}
+\DoxyCodeLine{18     \textcolor{keywordtype}{void} addEdge(\mbox{\hyperlink{class_edge}{Edge}}* edge);}
+\DoxyCodeLine{19     \textcolor{keywordtype}{bool} isVisited() \textcolor{keyword}{const};}
+\DoxyCodeLine{20     \textcolor{keywordtype}{void} setVisited(\textcolor{keywordtype}{bool} v);}
+\DoxyCodeLine{21     \textcolor{keywordtype}{double} getLatitude() \textcolor{keyword}{const};}
+\DoxyCodeLine{22     \textcolor{keywordtype}{double} getLongitude() \textcolor{keyword}{const};}
+\DoxyCodeLine{23     \textcolor{keywordtype}{double} getDistanceTo(\mbox{\hyperlink{class_node}{Node}}* other) \textcolor{keyword}{const};}
+\DoxyCodeLine{24     \textcolor{keywordtype}{void} setPath(\mbox{\hyperlink{class_edge}{Edge}}* p);}
+\DoxyCodeLine{25     \mbox{\hyperlink{class_edge}{Edge}}* getPath() \textcolor{keyword}{const};}
+\DoxyCodeLine{26     \textcolor{keywordtype}{void} setDistance(\textcolor{keywordtype}{double} d);}
+\DoxyCodeLine{27     \textcolor{keywordtype}{double} getDistance() \textcolor{keyword}{const};}
+\DoxyCodeLine{28     \mbox{\hyperlink{class_edge}{Edge}}* getEdgeTo(\mbox{\hyperlink{class_node}{Node}}* node) \textcolor{keyword}{const};}
+\DoxyCodeLine{29     \textcolor{keywordtype}{double} getHaversineDistanceTo(\mbox{\hyperlink{class_node}{Node}}* node) \textcolor{keyword}{const};}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{31     \textcolor{keywordtype}{bool} operator<(\mbox{\hyperlink{class_node}{Node}}\& node) \textcolor{keyword}{const};}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33 \textcolor{keyword}{private}:}
+\DoxyCodeLine{34     \textcolor{keywordtype}{int} id;}
+\DoxyCodeLine{35     \textcolor{keywordtype}{double} latitude;}
+\DoxyCodeLine{36     \textcolor{keywordtype}{double} longitude;}
+\DoxyCodeLine{37     \textcolor{keywordtype}{double} distance;}
+\DoxyCodeLine{38     list<Edge*> edges;}
+\DoxyCodeLine{39     \mbox{\hyperlink{class_edge}{Edge}}* path;}
+\DoxyCodeLine{40     \textcolor{keywordtype}{bool} visited;}
+\DoxyCodeLine{41 \};}
+\DoxyCodeLine{42 }
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44 \textcolor{preprocessor}{\#endif }\textcolor{comment}{//DA\_PROJECT2\_NODE\_H}}
+
+\end{DoxyCode}
