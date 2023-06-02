@@ -1,4 +1,5 @@
 #include "Graph.h"
+#include <functional>
 
 Graph::Graph(int index){
     if(index < 0 || index > 17){
