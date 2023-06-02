@@ -25,9 +25,9 @@ int getOptionFromUser() {
 void App::run() {
     while (true) {
         cout << "\n\n=========== SELECT A STRATEGY TO SOLVE T.S.P. ===========\n";
-        cout << "1. Backtracking algorithm\n";
-        cout << "2. Triangular Approximation\n";
-        cout << "3. Our heuristics\n";
+        cout << "1. Backtracking Algorithm\n";
+        cout << "2. Triangular Approximation Heuristics\n";
+        cout << "3. Nearest Insertion Heuristics\n";
         cout << "4. Quit\n";
         cout << "Enter your choice: ";
 
@@ -122,7 +122,7 @@ void App::menuOption2() {
         return;
     }
 
-    cout << "Running triangular approximation algorithm...\n";
+    cout << "Running triangular approximation heuristics...\n";
     auto startTime = std::chrono::high_resolution_clock::now();
     auto result = graph->TSP_TriangularApproximation();
     auto endTime = std::chrono::high_resolution_clock::now();
@@ -153,6 +153,30 @@ void App::menuOption3() {
     if(graph == nullptr){
         return;
     }
-    // Implement the functionality for option 3 here
+
+    cout << "Running insertion heuristics...\n";
+
+    auto startTime = std::chrono::high_resolution_clock::now();
+    auto result = graph->TSP_NearestInsertion();
+    auto endTime = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+
+    if(result.first == -1){
+        cout << "\n>>> It was not possible to find a path\n";
+        waitForKey();
+        return;
+    }
+
+    cout << "\n>>> RESULT: ";
+    if(graph->isToy()){
+        cout << "\nThe shortest path is: ";
+        for (unsigned int i : result.second) {
+            cout << i << " ";
+        }
+    }
+
+    cout << "\nThe distance is: " << result.first << endl;
+    cout << "Time spent: " << duration.count() << " milliseconds" << endl;
+
     waitForKey();
 }

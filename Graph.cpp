@@ -7,6 +7,24 @@ Graph::Graph(int index){
     this->index = index;
 }
 
+
+/*  FLAGS   */
+
+bool Graph::isRW() const {
+    return index >= 3 && index <= 5;
+}
+
+bool Graph::isToy() const {
+    return index <= 2;
+}
+
+bool Graph::isLoaded() const {
+    return !edges.empty();
+}
+
+
+/*  LOAD    */
+
 string Graph::getPath() const {
     switch (index) {
         case 0:
@@ -149,18 +167,14 @@ void Graph::loadEdges() {
     file.ignore(1000, '\n');
     string line;
 
-    // Get the total number of lines in the file (estimate)
     file.seekg(0, ios::end);
     streampos fileSize = file.tellg();
     file.seekg(0);
 
-    // Estimate the progress based on the file size
     const double estimatedProgressUnit = static_cast<float>(fileSize) / 100.0;
 
-    // Skip the header line
     getline(file, line);
 
-    // Loading edges
     float progress = 0.0;
     float totalProgress = 0.0;
 
@@ -221,11 +235,9 @@ void Graph::load() {
 }
 
 
-bool Graph::isLoaded() const {
-    return !edges.empty();
-}
+/*  BACKTRACKING ALGORITHM   */
 
-void Graph::TSP_Backtracking_aux(unsigned int curIndex, unsigned int count, double cost, double &ans, vector<unsigned int> &path, vector<vector<unsigned int>> paths){
+void Graph::backtracking_aux(unsigned int curIndex, unsigned int count, double cost, double &ans, vector<unsigned int> &path, vector<vector<unsigned int>> paths){
     if (count == nodes.size()){
         for (auto e : nodes[curIndex]->getEdges()){
             if (e->getNode1() == 0 || e->getNode2() == 0){
@@ -246,7 +258,7 @@ void Graph::TSP_Backtracking_aux(unsigned int curIndex, unsigned int count, doub
             paths[nextPos] = paths[curIndex];
             paths[nextPos].push_back(nextPos);
 
-            TSP_Backtracking_aux(nextPos, count + 1, cost + e->getDistance(), ans, path, paths);
+            backtracking_aux(nextPos, count + 1, cost + e->getDistance(), ans, path, paths);
             nodes[nextPos]->setVisited(false);
         }
     }
@@ -263,12 +275,15 @@ pair<double, vector<unsigned int>> Graph::TSP_Backtracking(){
     vector<unsigned int> path(nodes.size());
     paths[0].push_back(0);
 
-    TSP_Backtracking_aux(0, 1, 0, shortestDistance, path, paths);
+    backtracking_aux(0, 1, 0, shortestDistance, path, paths);
 
     path.push_back(0);
 
     return make_pair(shortestDistance, path);
 }
+
+
+/*  TRIANGULAR APPROXIMATION HEURISTICS  */
 
 void Graph::prim_generate_MST(){
     for (Node* node : nodes) {
@@ -345,6 +360,15 @@ double Graph::getPathCost(list<unsigned int> path) const{
 }
 
 pair<double, list<unsigned int>> Graph::TSP_TriangularApproximation(){
+    /*
+    Triangular Approximation
+    Step 1. Generate a minimum spanning tree T of G.
+    Step 2. Perform a depth-first search of T, starting at an arbitrary vertex r.
+    Step 3. Let L be the list of vertices visited in the order they are visited by the depth-first search.
+    Step 4. Return the Hamiltonian cycle H = L + r.
+    */
+
+
     prim_generate_MST();
     list<unsigned int> order;
     dfsMST(0, order);
@@ -353,10 +377,49 @@ pair<double, list<unsigned int>> Graph::TSP_TriangularApproximation(){
     return make_pair(cost, order);
 }
 
-bool Graph::isRW() const {
-    return index >= 3 && index <= 5;
-}
 
-bool Graph::isToy() const {
-    return index <= 2;
+/*  NEAREST INSERTION HEURISTICS    */
+
+pair<double, vector<unsigned int>> Graph::TSP_NearestInsertion() {
+    /*
+    Nearest Insertion
+    Step 1. Start with a sub-graph consisting of node i only.
+    Step 2. Find node r such that cir is minimal and form sub-tour i-r-i.
+    Step 3. (Selection step) Given a sub-tour, find node r not in the sub-tour closest to any node j in the sub-tour; i.e. with minimal crj
+    Step 4. (Insertion step) Find the arc (i, j) in the sub-tour which minimizes cir + crj - cij . Insert r between i and j.
+    Step 5. If all the nodes are added to the tour, stop. Else go to step 3
+
+    Information from: https://www2.isye.gatech.edu/~mgoetsch/cali/VEHICLE/TSP/TSP009__.HTM
+    */
+
+    vector<unsigned int> path;
+    path.push_back(0);
+    double cost = 0;
+
+    for (unsigned int i = 1; i < nodes.size(); i++) {
+        double minCost = std::numeric_limits<double>::max();
+        unsigned int minPos = 0;
+        for (unsigned int j = 0; j < path.size(); j++) {
+            double curCost = nodes[i]->getDistanceTo(nodes[path[j]]);
+            if (curCost < minCost) {
+                minCost = curCost;
+                minPos = j;
+            }
+        }
+        cost += minCost;
+        path.insert(path.begin() + minPos, i);
+    }
+
+    path.insert(path.begin(), 0);
+
+    double finalCost = 0;
+    for(int i = 0; i < path.size() - 1; i++){
+        Edge* edge = nodes[path[i]]->getEdgeTo(nodes[path[i+1]]);
+        if(edge == nullptr && !this->isRW()){
+            return make_pair(-1, vector<unsigned int>());
+        }
+        finalCost += edge ? edge->getDistance() : nodes[path[i]]->getHaversineDistanceTo(nodes[path[i+1]]);
+    }
+
+    return make_pair(finalCost, path);
 }

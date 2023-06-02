@@ -36,13 +36,15 @@ public:
     bool isRW() const;
     bool isToy() const;
 
-    void TSP_Backtracking_aux(unsigned int curIndex, unsigned int count, double cost, double &ans, vector<unsigned int> &path, vector<vector<unsigned int>> paths);
+    void backtracking_aux(unsigned int curIndex, unsigned int count, double cost, double &ans, vector<unsigned int> &path, vector<vector<unsigned int>> paths);
     pair<double, vector<unsigned int>> TSP_Backtracking();
 
     void prim_generate_MST();
     void dfsMST(unsigned int curIndex, list<unsigned int> &path);
     double getPathCost(list<unsigned int> path) const;
     pair<double, list<unsigned int>> TSP_TriangularApproximation();
+
+    pair<double, vector<unsigned int>> TSP_NearestInsertion();
 };
 
 

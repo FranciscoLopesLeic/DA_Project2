@@ -51,7 +51,6 @@ double Node::getDistanceTo(Node* other) const {
     int id2 = other->getId();
     for(Edge* edge : edges){
         if(edge->getNode1() == id2 || edge->getNode2() == id2){
-            edge->print();
             return edge->getDistance();
         }
     }
