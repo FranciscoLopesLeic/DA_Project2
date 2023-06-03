@@ -385,32 +385,49 @@ pair<double, vector<unsigned int>> Graph::TSP_NearestInsertion() {
     */
 
     vector<unsigned int> path;
+
+    // Step 1
     path.push_back(0);
-    double cost = 0;
 
+    // Step 2
+    unsigned int r = 0;
+
+    double minCost = std::numeric_limits<double>::max();
     for (unsigned int i = 1; i < nodes.size(); i++) {
+        double cost = nodes[0]->getEdgeTo(nodes[i])->getDistance();
+        if (cost < minCost) {
+            minCost = cost;
+            r = i;
+        }
+    }
+    path.push_back(r);
+
+    // Step 3
+    while (path.size() < nodes.size()) {
+        unsigned int r = 0;
+        unsigned int i = 0;
         double minCost = std::numeric_limits<double>::max();
-        unsigned int minPos = 0;
         for (unsigned int j = 0; j < path.size(); j++) {
-            Edge* e = nodes[i]->getEdgeTo(nodes[path[j]]);
-            if (e == nullptr && !this->isRW()){
-                return make_pair(-1, vector<unsigned int>());
-            }
-
-            double curCost = e? e->getDistance() : nodes[i]->getHaversineDistanceTo(nodes[path[j]]);
-
-            if (curCost < minCost) {
-                minCost = curCost;
-                minPos = j;
+            for (unsigned int k = 0; k < nodes.size(); k++) {
+                if (find(path.begin(), path.end(), k) == path.end()) {
+                    double cost = nodes[path[j]]->getEdgeTo(nodes[k])->getDistance();
+                    if (cost < minCost) {
+                        minCost = cost;
+                        r = k;
+                        i = j;
+                    }
+                }
             }
         }
-        cost += minCost;
-        path.insert(path.begin() + minPos, i);
+        // Step 4
+        path.insert(path.begin() + i + 1, r);
     }
 
-    path.insert(path.begin(), 0);
+    path.push_back(0);
 
-    return make_pair(getPathCost(path), path);
+    // Step 5
+    double cost = getPathCost(path);
+    return make_pair(cost, path);
 }
 
 
