@@ -374,6 +374,16 @@ pair<double, list<unsigned int>> Graph::TSP_TriangularApproximation(){
 
 pair<double, vector<unsigned int>> Graph::TSP_NearestInsertion() {
 
+    /*
+    Step 1. Start with a sub-graph consisting of node i only.
+    Step 2. Find node r such that cir is minimal and form sub-tour i-r-i. O(n)
+    Step 3. (Selection step) Given a sub-tour, find node r not in the sub-tour closest to any node j in the sub-tour; i.e. with minimal crj. O(n^2)
+    Step 4. (Insertion step) Find the arc (i, j) in the sub-tour which minimizes cir + crj - cij . Insert r between i and j. O(n)
+    Step 5. If all the nodes are added to the tour, stop. Else go to step 3
+
+    Information from: https://www2.isye.gatech.edu/~mgoetsch/cali/VEHICLE/TSP/TSP009__.HTM
+    */
+
     vector<unsigned int> path;
     path.push_back(0);
 

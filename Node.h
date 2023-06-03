@@ -104,7 +104,7 @@ public:
      * @param other The other node.
      * @return The distance to the other node.
      *
-     * Time complexity: O(E)
+     * Time complexity: O(E), where E is the number of edges connected to the node.
      */
     double getDistanceTo(Node* other) const;
 
@@ -151,7 +151,7 @@ public:
      * @param node The other node.
      * @return The edge between this node and the other node, or nullptr if no edge exists.
      *
-     * Time complexity: O(E)
+     * Time complexity: O(E) where E is the number of edges connected to the node.
      */
     Edge* getEdgeTo(Node* node) const;
 

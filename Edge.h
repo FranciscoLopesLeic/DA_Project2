@@ -29,6 +29,7 @@ public:
      * @param distance Distance between the two nodes
      */
     Edge(int node1, int node2, double distance);
+
     /**
      * @brief Gets the first node
      *
@@ -37,6 +38,7 @@ public:
      * @return First node
      */
     int getNode1() const;
+
     /**
      * @brief Gets the second node
      *
@@ -45,6 +47,7 @@ public:
      * @return Second node
      */
     int getNode2() const;
+
     /**
      * @brief Gets the distance between the two nodes
      *
@@ -53,6 +56,7 @@ public:
      * @return Distance between the two nodes
      */
     double getDistance() const;
+
     /**
      * @brief Gets if the edge is selected
      *
@@ -61,6 +65,7 @@ public:
      * @return True if the edge is selected, false otherwise
      */
     bool isSelected() const;
+
     /**
      * @brief Sets if the edge is selected
      *
@@ -69,6 +74,7 @@ public:
      * @param s True if the edge is selected, false otherwise
      */
     void setSelected(bool s);
+
     /**
      * @brief Prints the edge
      *

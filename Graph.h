@@ -41,15 +41,17 @@ public:
      *
      * Time complexity: O(1)
      *
-     * @param index Index of the graph
+     * @param index Index of the graph - used to determine which graph to load
      */
     Graph(int index);
+
     /**
      * @brief Loads the graph by invoking appropriate functions based on the value of 'index'.
      *
      * O(max(numberNodes, N + M))
      */
     void load();
+
     /**
      * @brief Checks if the graph is loaded.
      *
@@ -58,6 +60,7 @@ public:
      * Time complexity: O(1)
      */
     bool isLoaded() const;
+
     /**
      * @brief Returns the number of nodes based on the current graph index.
      *
@@ -66,6 +69,7 @@ public:
      * Time complexity: O(1)
      */
     int getNumberNodes() const;
+
     /**
      * @brief Checks if the graph is a read-write (RW) graph.
      *
@@ -74,6 +78,7 @@ public:
      * Time complexity: O(1)
      */
     bool isRW() const;
+
     /**
      * @brief Checks if the graph is a toy graph.
      *
@@ -102,7 +107,7 @@ public:
      * @param path Reference to the vector storing the nodes of the shortest path.
      * @param paths Vector of vectors storing the paths explored so far.
      *
-     * Time complexity: O(N!)
+     * Time complexity: O(N!), where N is the number of nodes
      */
     void backtracking_aux(unsigned int curIndex, unsigned int count, double cost, double &ans, vector<unsigned int> &path, vector<vector<unsigned int>> paths);
 
@@ -111,7 +116,7 @@ public:
      *
      * @return A pair consisting of the shortest distance and the vector of node indices representing the shortest Hamiltonian cycle.
      *
-     * Time complexity: O(N!)
+     * Time complexity: O(N!), where N is the number of nodes
      */
     pair<double, vector<unsigned int>> TSP_Backtracking();
 
@@ -119,7 +124,7 @@ public:
     /**
      * @brief Generates the MST of the graph using Prim's algorithm.
      *
-     * Time complexity: O(N + MlogM)
+     * Time complexity: O(N + MlogM), where N is the number of nodes and M is the number of edges
      */
     void prim_generate_MST();
 
@@ -134,6 +139,25 @@ public:
     void dfsMST(unsigned int curIndex, list<unsigned int> &path);
 
     /**
+     * @brief Solves the Traveling Salesman Problem (TSP) using the Triangular Approximation algorithm.
+     *
+     * @return A pair consisting of the shortest distance and the list of node indices representing the shortest Hamiltonian cycle.
+     *
+     * Time complexity: O(N + MlogM)
+     */
+    pair<double, list<unsigned int>> TSP_TriangularApproximation();
+
+
+    /**
+     * @brief Solves the Traveling Salesman Problem (TSP) using the Nearest Insertion algorithm.
+     *
+     * @return A pair consisting of the cost of the tour and the vector of node indices representing the tour.
+     *
+     * Time complexity: O(N^3), where N is the number of nodes in the graph
+     */
+    pair<double, vector<unsigned int>> TSP_NearestInsertion();
+
+    /**
      * @brief Calculates the cost (distance) of a given path in the graph.
      *
      * @param path The list of node indices representing a path in the graph.
@@ -144,24 +168,14 @@ public:
     double getPathCost(list<unsigned int> path) const;
 
     /**
-     * @brief Solves the Traveling Salesman Problem (TSP) using the Triangular Approximation algorithm.
+     * @brief Calculates the cost (distance) of a given path in the graph.
      *
-     * @return A pair consisting of the shortest distance and the list of node indices representing the shortest Hamiltonian cycle.
+     * @param path The vector of node indices representing a path in the graph.
+     * @return The cost (distance) of the path. Returns -1 if an invalid edge is encountered and the graph is not a read-write (RW) graph.
      *
-     * Time complexity: O(N + MlogM)
+     * Time complexity: O(P) being P the size of the path
      */
-    pair<double, list<unsigned int>> TSP_TriangularApproximation();
-
     double getPathCost(vector<unsigned int> path) const;
-
-    /**
-     * @brief Solves the Traveling Salesman Problem (TSP) using the Nearest Insertion algorithm.
-     *
-     * @return A pair consisting of the cost of the tour and the vector of node indices representing the tour.
-     *
-     * Time complexity: O(N^2)
-     */
-    pair<double, vector<unsigned int>> TSP_NearestInsertion();
 };
 
 
