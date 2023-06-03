@@ -168,7 +168,7 @@ void App::menuOption3() {
     }
 
     cout << "\n>>> RESULT: ";
-    // cout << "\nThe path contains the right number of nodes? " << (result.second.size() == graph->getNumberNodes()+1 ? "Yes" : "No");
+    cout << "\nThe path contains the right number of nodes? " << (result.second.size() == graph->getNumberNodes()+1 ? "Yes" : "No");
     if(graph->getNumberNodes() <= 100){
         cout << "\nThe shortest path is: ";
         for (unsigned int i : result.second) {

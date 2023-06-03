@@ -373,25 +373,11 @@ pair<double, list<unsigned int>> Graph::TSP_TriangularApproximation(){
 /*  NEAREST INSERTION HEURISTICS    */
 
 pair<double, vector<unsigned int>> Graph::TSP_NearestInsertion() {
-    /*
-    Nearest Insertion
-    Step 1. Start with a sub-graph consisting of node i only.
-    Step 2. Find node r such that cir is minimal and form sub-tour i-r-i.
-    Step 3. (Selection step) Given a sub-tour, find node r not in the sub-tour closest to any node j in the sub-tour; i.e. with minimal crj
-    Step 4. (Insertion step) Find the arc (i, j) in the sub-tour which minimizes cir + crj - cij . Insert r between i and j.
-    Step 5. If all the nodes are added to the tour, stop. Else go to step 3
-
-    Information from: https://www2.isye.gatech.edu/~mgoetsch/cali/VEHICLE/TSP/TSP009__.HTM
-    */
 
     vector<unsigned int> path;
-
-    // Step 1
     path.push_back(0);
 
-    // Step 2
     unsigned int r = 0;
-
     double minCost = std::numeric_limits<double>::max();
     for (unsigned int i = 1; i < nodes.size(); i++) {
         double cost = nodes[0]->getEdgeTo(nodes[i])->getDistance();
@@ -402,33 +388,48 @@ pair<double, vector<unsigned int>> Graph::TSP_NearestInsertion() {
     }
     path.push_back(r);
 
-    // Step 3
     while (path.size() < nodes.size()) {
         unsigned int r = 0;
-        unsigned int i = 0;
         double minCost = std::numeric_limits<double>::max();
-        for (unsigned int j = 0; j < path.size(); j++) {
-            for (unsigned int k = 0; k < nodes.size(); k++) {
-                if (find(path.begin(), path.end(), k) == path.end()) {
-                    double cost = nodes[path[j]]->getEdgeTo(nodes[k])->getDistance();
-                    if (cost < minCost) {
-                        minCost = cost;
+
+        for (unsigned int k = 0; k < nodes.size(); k++) {
+            if (find(path.begin(), path.end(), k) == path.end()) {
+                double nearestDist = std::numeric_limits<double>::max();
+                for (unsigned int j = 0; j < path.size(); j++) {
+                    double dist = nodes[path[j]]->getEdgeTo(nodes[k])->getDistance();
+                    if (dist < nearestDist) {
+                        nearestDist = dist;
                         r = k;
-                        i = j;
                     }
+                }
+                if (nearestDist < minCost) {
+                    minCost = nearestDist;
                 }
             }
         }
-        // Step 4
-        path.insert(path.begin() + i + 1, r);
+
+        unsigned int insertionIndex = 0;
+        double minInsertionCost = std::numeric_limits<double>::max();
+
+        for (unsigned int i = 0; i < path.size() - 1; i++) {
+            unsigned int j = i + 1;
+            double insertionCost = nodes[path[i]]->getEdgeTo(nodes[r])->getDistance() +
+                                   nodes[r]->getEdgeTo(nodes[path[j]])->getDistance() -
+                                   nodes[path[i]]->getEdgeTo(nodes[path[j]])->getDistance();
+            if (insertionCost < minInsertionCost) {
+                minInsertionCost = insertionCost;
+                insertionIndex = j;
+            }
+        }
+
+        path.insert(path.begin() + insertionIndex, r);
     }
 
     path.push_back(0);
-
-    // Step 5
     double cost = getPathCost(path);
     return make_pair(cost, path);
 }
+
 
 
 /*  CALCULATE PATH'S TOTAL COST */
