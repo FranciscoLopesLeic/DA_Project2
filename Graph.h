@@ -84,6 +84,15 @@ public:
     bool isToy() const;
 
     /**
+     * @brief Checks if the graph is an extra graph.
+     *
+     * @return True if the graph is an extra graph, false otherwise.
+     *
+     * Time complexity: O(1)
+     */
+    bool isExtra() const;
+
+    /**
      * @brief Auxiliary function for backtracking to find the shortest path visiting all nodes starting from a given index.
      *
      * @param curIndex The current index (position) in the graph being explored.
@@ -142,6 +151,8 @@ public:
      * Time complexity: O(N + MlogM)
      */
     pair<double, list<unsigned int>> TSP_TriangularApproximation();
+
+    double getPathCost(vector<unsigned int> path) const;
 
     /**
      * @brief Solves the Traveling Salesman Problem (TSP) using the Nearest Insertion algorithm.

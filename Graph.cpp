@@ -19,6 +19,10 @@ bool Graph::isToy() const {
     return index <= 2;
 }
 
+bool Graph::isExtra() const {
+    return index >= 6 && index <= 17;
+}
+
 bool Graph::isLoaded() const {
     return !edges.empty();
 }
@@ -134,6 +138,7 @@ void Graph::loadNodesRWGraph() {
     }
 
     file.ignore(1000, '\n');
+
     string line;
 
     while(getline(file, line)){
@@ -155,7 +160,7 @@ void Graph::loadNodesRWGraph() {
 
 void Graph::loadEdges() {
     string path = getPath();
-    if (index > 2 && index < 6) {
+    if (isRW()) {
         path += "/edges.csv";
     }
     ifstream file(path);
@@ -174,7 +179,8 @@ void Graph::loadEdges() {
 
     const double estimatedProgressUnit = static_cast<float>(fileSize) / 100.0;
 
-    getline(file, line);
+    if(!isExtra())
+        getline(file, line);
 
     float progress = 0.0;
     float totalProgress = 0.0;
@@ -189,6 +195,7 @@ void Graph::loadEdges() {
 
         int id1 = stoi(row[0]);
         int id2 = stoi(row[1]);
+
         double distance = stod(row[2]);
 
         Node* node1 = nodes[id1];
@@ -290,6 +297,9 @@ void Graph::prim_generate_MST(){
     for (Node* node : nodes) {
         node->setVisited(false);
     }
+    for (Edge* edge : edges) {
+        edge->setSelected(false);
+    }
 
     priority_queue<Edge*, vector<Edge*>, function<bool(Edge*, Edge*)>> pq
                                         ([](Edge* a, Edge* b) {return a->getDistance() > b->getDistance();});
@@ -341,25 +351,6 @@ void Graph::dfsMST(unsigned int curIndex, list<unsigned int> &path){
     }
 }
 
-double Graph::getPathCost(list<unsigned int> path) const{
-    double cost = 0;
-
-    auto it = path.begin();
-    auto it2 = path.begin();
-    it2++;
-    for (; it2 != path.end(); it++, it2++) {
-        Node* current = nodes[*it];
-        Node* next = nodes[*it2];
-
-        Edge* edge = current->getEdgeTo(next);
-        if(edge == nullptr && !this->isRW()){
-            return -1;
-        }
-        cost += edge? edge->getDistance() : current->getHaversineDistanceTo(next);
-    }
-    return cost;
-}
-
 pair<double, list<unsigned int>> Graph::TSP_TriangularApproximation(){
     /*
     Triangular Approximation
@@ -401,7 +392,13 @@ pair<double, vector<unsigned int>> Graph::TSP_NearestInsertion() {
         double minCost = std::numeric_limits<double>::max();
         unsigned int minPos = 0;
         for (unsigned int j = 0; j < path.size(); j++) {
-            double curCost = nodes[i]->getDistanceTo(nodes[path[j]]);
+            Edge* e = nodes[i]->getEdgeTo(nodes[path[j]]);
+            if (e == nullptr && !this->isRW()){
+                return make_pair(-1, vector<unsigned int>());
+            }
+
+            double curCost = e? e->getDistance() : nodes[i]->getHaversineDistanceTo(nodes[path[j]]);
+
             if (curCost < minCost) {
                 minCost = curCost;
                 minPos = j;
@@ -413,14 +410,44 @@ pair<double, vector<unsigned int>> Graph::TSP_NearestInsertion() {
 
     path.insert(path.begin(), 0);
 
-    double finalCost = 0;
-    for(int i = 0; i < path.size() - 1; i++){
-        Edge* edge = nodes[path[i]]->getEdgeTo(nodes[path[i+1]]);
-        if(edge == nullptr && !this->isRW()){
-            return make_pair(-1, vector<unsigned int>());
-        }
-        finalCost += edge ? edge->getDistance() : nodes[path[i]]->getHaversineDistanceTo(nodes[path[i+1]]);
-    }
+    return make_pair(getPathCost(path), path);
+}
 
-    return make_pair(finalCost, path);
+
+/*  CALCULATE PATH'S TOTAL COST */
+
+double Graph::getPathCost(list<unsigned int> path) const{
+    double cost = 0;
+
+    auto it = path.begin();
+    auto it2 = path.begin();
+    it2++;
+    for (; it2 != path.end(); it++, it2++) {
+        Node* current = nodes[*it];
+        Node* next = nodes[*it2];
+
+        Edge* edge = current->getEdgeTo(next);
+        if(edge == nullptr && !this->isRW()){
+            return -1;
+        }
+        cost += edge? edge->getDistance() : current->getHaversineDistanceTo(next);
+    }
+    return cost;
+}
+
+double Graph::getPathCost(vector<unsigned int> path) const{
+    double cost = 0;
+
+    for (unsigned int i = 0; i < path.size() - 1; i++) {
+        Node* current = nodes[path[i]];
+        Node* next = nodes[path[i + 1]];
+
+        Edge* edge = current->getEdgeTo(next);
+        if(edge == nullptr && !this->isRW()){
+            cout << "Edge not found: " << current->getId() << " -> " << next->getId() << endl;
+            return -1;
+        }
+        cost += edge? edge->getDistance() : current->getHaversineDistanceTo(next);
+    }
+    return cost;
 }

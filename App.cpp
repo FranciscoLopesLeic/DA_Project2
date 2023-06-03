@@ -103,7 +103,7 @@ void App::menuOption1() {
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 
     cout << "\n>>> RESULT: ";
-    if(graph->isToy()){
+    if(graph->getNumberNodes() <= 100){
         cout << "\nThe shortest path is: ";
         for (unsigned int i : result.second) {
             cout << i << " ";
@@ -135,7 +135,7 @@ void App::menuOption2() {
     }
 
     cout << "\n>>> RESULT: ";
-    if(graph->isToy()){
+    if(graph->getNumberNodes() <= 100){
         cout << "\nThe shortest path is: ";
         for (unsigned int i : result.second) {
             cout << i << " ";
@@ -168,7 +168,7 @@ void App::menuOption3() {
     }
 
     cout << "\n>>> RESULT: ";
-    if(graph->isToy()){
+    if(graph->getNumberNodes() <= 100){
         cout << "\nThe shortest path is: ";
         for (unsigned int i : result.second) {
             cout << i << " ";
