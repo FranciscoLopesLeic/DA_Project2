@@ -306,6 +306,8 @@ void Graph::prim_generate_MST(){
     unsigned int sourceId = 0;
     nodes[sourceId]->setVisited(true);
 
+
+
     for (Edge* edge : nodes[sourceId]->getEdges()) {pq.push(edge);}
 
     while (!pq.empty()) {
@@ -315,8 +317,6 @@ void Graph::prim_generate_MST(){
         Node *source = curEdge->getNode1() == sourceId ? nodes[curEdge->getNode1()] : nodes[curEdge->getNode2()];
         Node *dest = curEdge->getNode1() == sourceId ? nodes[curEdge->getNode2()] : nodes[curEdge->getNode1()];
 
-        sourceId = dest->getId();
-
         if (source->isVisited() && dest->isVisited())
             continue;
 
@@ -324,15 +324,19 @@ void Graph::prim_generate_MST(){
         dest->setVisited(true);
 
         for (Edge *edge: dest->getEdges()) {
-            if (!edge->isSelected()) {
+            int otherId = edge->getNode1() == dest->getId() ? edge->getNode2() : edge->getNode1();
+            if (!nodes[otherId]->isVisited()) {
                 pq.push(edge);
             }
         }
+
+        sourceId = dest->getId();
     }
 
     for (Node* node : nodes) {
         node->setVisited(false);
     }
+
 }
 
 void Graph::dfsMST(unsigned int curIndex, list<unsigned int> &path){
