@@ -227,7 +227,6 @@ void Graph::loadEdges() {
     cout << endl;
 }
 
-
 void Graph::load() {
     cout << "\nLoading graph...";
 
@@ -360,7 +359,6 @@ pair<double, list<unsigned int>> Graph::TSP_TriangularApproximation(){
     Step 4. Return the Hamiltonian cycle H = L + r.
     */
 
-
     prim_generate_MST();
     list<unsigned int> order;
     dfsMST(0, order);
@@ -384,29 +382,39 @@ pair<double, vector<unsigned int>> Graph::TSP_NearestInsertion() {
     Information from: https://www2.isye.gatech.edu/~mgoetsch/cali/VEHICLE/TSP/TSP009__.HTM
     */
 
+    for(auto node : nodes){
+        node->setVisited(false);
+    }
+
     vector<unsigned int> path;
     path.push_back(0);
+    nodes[0]->setVisited(true);
 
     unsigned int r = 0;
     double minCost = std::numeric_limits<double>::max();
     for (unsigned int i = 1; i < nodes.size(); i++) {
-        double cost = nodes[0]->getEdgeTo(nodes[i])->getDistance();
+        auto edge = nodes[0]->getEdgeTo(nodes[i]);
+        if(edge == nullptr) continue;
+        double cost = edge->getDistance();
         if (cost < minCost) {
             minCost = cost;
             r = i;
         }
     }
     path.push_back(r);
+    nodes[r]->setVisited(true);
 
     while (path.size() < nodes.size()) {
-        unsigned int r = 0;
-        double minCost = std::numeric_limits<double>::max();
+        r = 0;
+        minCost = std::numeric_limits<double>::max();
 
         for (unsigned int k = 0; k < nodes.size(); k++) {
-            if (find(path.begin(), path.end(), k) == path.end()) {
+            if (!nodes[k]->isVisited()) {
                 double nearestDist = std::numeric_limits<double>::max();
-                for (unsigned int j = 0; j < path.size(); j++) {
-                    double dist = nodes[path[j]]->getEdgeTo(nodes[k])->getDistance();
+                for (unsigned int j : path) {
+                    auto edge = nodes[j]->getEdgeTo(nodes[k]);
+                    if(edge == nullptr) continue;
+                    double dist = edge->getDistance();
                     if (dist < nearestDist) {
                         nearestDist = dist;
                         r = k;
@@ -423,9 +431,16 @@ pair<double, vector<unsigned int>> Graph::TSP_NearestInsertion() {
 
         for (unsigned int i = 0; i < path.size() - 1; i++) {
             unsigned int j = i + 1;
-            double insertionCost = nodes[path[i]]->getEdgeTo(nodes[r])->getDistance() +
-                                   nodes[r]->getEdgeTo(nodes[path[j]])->getDistance() -
-                                   nodes[path[i]]->getEdgeTo(nodes[path[j]])->getDistance();
+
+            auto edge1 = nodes[path[i]]->getEdgeTo(nodes[r]);
+            auto edge2 = nodes[r]->getEdgeTo(nodes[path[j]]);
+            auto edge3 = nodes[path[i]]->getEdgeTo(nodes[path[j]]);
+
+            if(edge1 == nullptr || edge2 == nullptr || edge3 == nullptr) return make_pair(-1, vector<unsigned int>());
+
+            double insertionCost = edge1->getDistance() +
+                                   edge2->getDistance() -
+                                   edge3->getDistance();
             if (insertionCost < minInsertionCost) {
                 minInsertionCost = insertionCost;
                 insertionIndex = j;
@@ -433,13 +448,13 @@ pair<double, vector<unsigned int>> Graph::TSP_NearestInsertion() {
         }
 
         path.insert(path.begin() + insertionIndex, r);
+        nodes[r]->setVisited(true);
     }
 
     path.push_back(0);
     double cost = getPathCost(path);
     return make_pair(cost, path);
 }
-
 
 
 /*  CALCULATE PATH'S TOTAL COST */
